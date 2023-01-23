@@ -1,0 +1,111 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\VendorController;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\VendorFlyerController;
+use App\Http\Controllers\DesignedController;
+use App\Http\Controllers\SliderController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+
+
+    Route::any('/', [AdminController::class, 'showLogin'])->name('admin.login');
+    Route::group(['middleware' => ['auth:web']], function () {
+        Route::any('/dashboard', [AdminController::class, 'showDashboard'])->name('dashboard');
+        Route::any('/admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
+        //category
+        Route::any('/category', [CategoryController::class, 'showCategory'])->name('showCategory');
+        Route::any('/category/save', [CategoryController::class, 'saveCategory'])->name('saveCategory');
+        Route::any('/category/edit/{id}', [CategoryController::class, 'editCategory'])->name('editCategory');
+        Route::any('/category/change/status', [CategoryController::class, 'changeCategoryStatus'])->name('changeCategoryStatus');
+        //Business Category
+        Route::any('/category/business', [BusinessController::class, 'showBusinessCategory'])->name('showBusinessCategory');
+        Route::any('/category/business/save', [BusinessController::class, 'saveBusinessCategory'])->name('saveBusinessCategory');
+        Route::any('/category/business/edit/{id}', [BusinessController::class, 'editBusinessCategory'])->name('editBusinessCategory');
+        Route::any('/category/business/change/status', [BusinessController::class, 'changeBusinessCategoryStatus'])->name('changeBusinessCategoryStatus');
+        //plan master
+        Route::any('/plan', [PlanController::class, 'showPlan'])->name('showPlan');
+        Route::any('/plan/create', [PlanController::class, 'createPlan'])->name('createPlan');
+        Route::any('/plan/save', [PlanController::class, 'savePlan'])->name('savePlan');
+        Route::any('/plan/edit/{id}', [PlanController::class, 'editPlan'])->name('editPlan');
+        Route::any('/plan/change/status', [PlanController::class, 'changePlanStatus'])->name('changePlanStatus');
+        //vendor master
+        Route::any('/vendor', [VendorController::class, 'showVendor'])->name('showVendor');
+        Route::any('/vendor/create', [VendorController::class, 'createVendor'])->name('createVendor');
+        Route::any('/vendor/save', [VendorController::class, 'saveVendor'])->name('saveVendor');
+        Route::any('/vendor/edit/{id}', [VendorController::class, 'editVendor'])->name('editVendor');
+        Route::any('/vendor/change/status', [VendorController::class, 'changeVendorStatus'])->name('changeVendorStatus');
+        Route::any('/vendor/approval/status', [VendorController::class, 'vendorAdminApproval'])->name('vendorAdminApproval');
+        Route::any('/vendor/payment/status', [VendorController::class, 'adminApprovalVendorPayment'])->name('adminApprovalVendorPayment');
+        Route::any('/vendor/filter', [VendorController::class, 'filterVendor'])->name('filterVendor');
+        Route::any('/vendor/view/{id}', [VendorController::class, 'viewVendor'])->name('viewVendor');
+        Route::any('/vendor/edit/{id}', [VendorController::class, 'editVendor'])->name('editVendor');
+        Route::any('/vendor/fetch/district', [VendorController::class, 'fetchVendorDistrict'])->name('fetchVendorDistrict');
+        Route::any('/vendor/reject/reason', [VendorController::class, 'saveRejectReason'])->name('saveRejectReason');
+        
+        //State
+        Route::any('/state', [StateController::class, 'showState'])->name('showState');
+        Route::any('/state/save', [StateController::class, 'saveState'])->name('saveState');
+        Route::any('/state/edit/{id}', [StateController::class, 'editState'])->name('editState');
+        Route::any('/state/change/status', [StateController::class, 'changeStateStatus'])->name('changeStateStatus');
+        //District
+        Route::any('/district', [DistrictController::class, 'showDistrict'])->name('showDistrict');
+        Route::any('/district/save', [DistrictController::class, 'saveDistrict'])->name('saveDistrict');
+        Route::any('/district/edit/{id}', [DistrictController::class, 'editDistrict'])->name('editDistrict');
+        Route::any('/district/change/status', [DistrictController::class, 'changeDistrictStatus'])->name('changeDistrictStatus');
+        Route::any('/district/fetch/district', [DistrictController::class, 'fetchDistrict'])->name('fetchDistrict');
+        //location
+        Route::any('/location', [LocationController::class, 'showLocation'])->name('showLocation');
+        Route::any('/location/save', [LocationController::class, 'saveLocation'])->name('saveLocation');
+        Route::any('/location/edit/{id}', [LocationController::class, 'editLocation'])->name('editLocation');
+        Route::any('/location/change/status', [LocationController::class, 'changeLocationStatus'])->name('changeLocationStatus');
+        Route::any('/location/fetch/district', [LocationController::class, 'fetchLocation'])->name('fetchLocation');
+        //vendor flyers
+        Route::any('/vendor/flyer', [VendorFlyerController::class, 'showVendorFlyer'])->name('showVendorFlyer');
+        Route::any('/vendor/flyer/save', [VendorFlyerController::class, 'saveVendorFlyer'])->name('saveVendorFlyer');
+        Route::any('/vendor/flyer/view/{id}', [VendorFlyerController::class, 'viewVendorFlyer'])->name('viewVendorFlyer');
+        Route::any('/vendor/flyer/change/status', [VendorFlyerController::class, 'changeVendorFlyerStatus'])->name('changeVendorFlyerStatus');
+        Route::any('/vendor/flyer/approval', [VendorFlyerController::class, 'flyerApprovalByAdmin'])->name('flyerApprovalByAdmin');
+        Route::any('/vendor/flyer/delete', [VendorFlyerController::class, 'flyerDeleteByAdmin'])->name('flyerDeleteByAdmin');
+        Route::any('/vendor/change/flyer/status', [VendorController::class, 'flyerStatusChange'])->name('flyerStatusChange');
+        Route::any('/vendor/flyer/admin/delete', [VendorController::class, 'deleteFlyerByAdmin'])->name('deleteFlyerByAdmin');
+        //Designed
+        Route::any('/designed', [DesignedController::class, 'showDesigned'])->name('showDesigned');
+        Route::any('/designed/save', [DesignedController::class, 'saveDesigned'])->name('saveDesigned');
+        Route::any('/designed/edit/{id}', [DesignedController::class, 'editDesigned'])->name('editDesigned');
+        Route::any('/designed/change/status', [DesignedController::class, 'changeDesignedStatus'])->name('changeDesignedStatus');
+        //location
+        Route::any('/slider', [SliderController::class, 'showSlider'])->name('showSlider');
+        Route::any('/slider/save', [SliderController::class, 'saveSlider'])->name('saveSlider');
+        Route::any('/slider/edit/{id}', [SliderController::class, 'editSlider'])->name('editSlider');
+        Route::any('/slider/change/status', [SliderController::class, 'changeSliderStatus'])->name('changeSliderStatus');
+        //Reports
+        Route::any('/report/transaction', [AdminController::class, 'transactionReport'])->name('transactionReport');
+        Route::any('/report/filter/transaction', [AdminController::class, 'filterTransactionDetails'])->name('filterTransactionDetails');
+        //pending vendors
+        Route::any('/vendor/pending', [AdminController::class, 'showPendingVendor'])->name('showPendingVendor');
+        Route::any('/vendor/pending/filter', [AdminController::class, 'filterPendingVendor'])->name('filterPendingVendor');
+        Route::any('/vendor/pending/payment', [AdminController::class, 'showPendingVendorPayment'])->name('showPendingVendorPayment');
+        //customers
+        Route::any('/customer/list', [AdminController::class, 'showCustomer'])->name('showCustomer');
+        Route::any('/customer/filter', [AdminController::class, 'filterCustomer'])->name('filterCustomer');
+        Route::any('/customer/change/status', [AdminController::class, 'changeCustomerStatus'])->name('changeCustomerStatus');
+    });
+
+require __DIR__.'/auth.php';
