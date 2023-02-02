@@ -700,7 +700,7 @@ class ApiController extends BaseController
                         'amount'                    => $plan->mrp,
                         'phone'                     => $user->mobile,
                         'buyer_name'                => $user->name.'-'.$order_id,
-                        'redirect_url'              => "https://vendor.iwillfly.in/payment_success",
+                        'redirect_url'              => "https://vendor.GIFTX.in/payment_success",
                         'send_email'                => true,
                         'send_sms'                  => true,
                         'email'                     => $user->email,

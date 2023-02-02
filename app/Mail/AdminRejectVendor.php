@@ -29,8 +29,8 @@ class AdminRejectVendor extends Mailable
     public function build()
     {
         $address    = 'no-reply@alliance-share.com';
-        $subject    = 'Thank you for Registering on IWILLFLY';
-        $name       = 'IWILLFLY';
+        $subject    = 'Thank you for Registering on GIFTX';
+        $name       = 'GIFTX';
         return $this->view('emails.sendVendorRejectionMail')
                     ->from($address, $name)
                     ->subject($subject)

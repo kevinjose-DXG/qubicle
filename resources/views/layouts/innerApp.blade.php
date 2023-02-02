@@ -84,7 +84,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
       <img src="{{ asset('/')  }}images/mail_logo.png" alt="AdminLTE Logo" class="brand-image img" style="opacity: .8">
-      <span class="brand-text font-weight-light">IWILLFLY</span>
+      <span class="brand-text font-weight-light">GIFTX</span>
     </a>
 
     <!-- Sidebar -->
@@ -119,7 +119,7 @@
   </aside>
   @yield('content')
   <footer class="main-footer">
-    <strong>{{ __('page.copyright')}} &copy; {{ date('Y')}} <a href="{{ route('dashboard')}}">IWILLFLY</a>.</strong>
+    <strong>{{ __('page.copyright')}} &copy; {{ date('Y')}} <a href="{{ route('dashboard')}}">GIFTX</a>.</strong>
     {{ __('page.all_rights_reserved')}}
     <!-- <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0

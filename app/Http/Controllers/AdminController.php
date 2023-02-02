@@ -23,14 +23,13 @@ class AdminController extends Controller
      *
      */
     public function showDashboard(Request $request){
-        $total_vendor           = User::where('user_type','2')->where('admin_approved','1')->count();
+        $total_vendor           = User::where('user_type','2')->count();
         $total_customer         = User::where('user_type','0')->count();
-        $total_pending_flyers   = VendorFlyer::where('admin_approved','0')->count();
-        $total_pending_vendors  = User::where('user_type','2')->where('admin_approved','0')->count();
+        $total_pending_vendors  = User::where('user_type','2')->count();
         $data                   = [
             'total_vendor'          => $total_vendor,
             'total_customer'        => $total_customer,
-            'total_pending_flyers'  => $total_pending_flyers,
+            'total_pending_flyers'  => '0',
             'total_pending_vendors' => $total_pending_vendors
         ];
         return view('dashboard',$data);

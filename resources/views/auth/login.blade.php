@@ -18,12 +18,12 @@
 <div class="login-box">
   <div class="login-logo">
     <!-- <a href="../../index2.html"><b>Admin</b>LTE</a> -->
-    <img src="{{ asset('/') }}images/mail_logo.png" width="100px"/>
+    <!-- <img src="{{ asset('/') }}images/mail_logo.png" width="100px"/> -->
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">IWILLFLY</p>
+      <p class="login-box-msg">GIFTX</p>
 <!-- Session Status -->
 <x-auth-session-status class="mb-4" :status="session('status')" />
 
