@@ -104,7 +104,7 @@
                   </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
-                     <input type="text" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
+                     <input type="file" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
                   </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Description</label>

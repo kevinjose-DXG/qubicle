@@ -42,9 +42,18 @@ class CategoryController extends Controller
             }else{
                 $category               = new Category();
             }
-
-                $category->title	    = $request->category;
-                $category->description  = $request->description;
+            if ($request->hasFile('category_icon')) {
+                $filenameWithExt                = $request->file('category_icon')->getClientOriginalName();
+                $filename                       = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension                      = $request->file('category_icon')->getClientOriginalExtension();
+                $fileNameToStore                = 'category_'.uniqid().'.'.$extension;
+                $path                           = $request->file('category_icon')->storeAs('public/category/', $fileNameToStore);
+                $category->image                = $fileNameToStore;
+            }
+                $category->title	            = $request->category;
+                $category->parent_id	        = $request->parent_id;
+                $category->title	            = $request->category;
+                $category->description          = $request->description;
                 $category->save();
             if($category){
                 return response()->json(['status'=>true,'message'=>'Success']);
