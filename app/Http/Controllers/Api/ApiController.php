@@ -27,355 +27,7 @@ use Exception;
 
 class ApiController extends BaseController
 {
-     /**
-     *
-     */
-    public function vendorLogin(Request $request){
-        $mobile         = $request->mobile;
-        $vendor         = User::where('mobile',$mobile)->first();
-        $random         = random_int(100000, 999999);
-        if($vendor){
-            if($vendor->status=='active'){
-                if($vendor->user_type=='0'){
-                    return $this->sendError('customer','',200);
-                }
-                if($vendor->user_type=='3'){
-                    return $this->sendError('UnAuthorized User','',200);
-                }
-                if($vendor->user_type=='1'||$vendor->user_type=='2'){
-                    if($request->otp!=""){
-                        if($request->otp==$vendor->otp){
-                            $vendor->otp        = '0';
-                            $vendor->save();
-                            Auth::login($vendor);
-                            $user = Auth::user();
-                            $success['token']       =  $vendor->createToken('MyApp')->accessToken; 
-                            $success['vendor_id']   =  $vendor->id; 
-                            return $this->sendResponse($success, 'User login successfully.');
-                        }else{
-                            return $this->sendError('OTP Miss Match','',200);
-                        }
-                    }else{
-                        if($vendor->verified=="1"){
-                            $vendor->otp        = $random;
-                            $vendor->save();
-                            $this->sendSms($vendor->mobile,$random);
-                            $data = [
-                                'otp'           => $random,
-                                'verified'      => 1,
-                            ];
-                            return $this->sendResponse($data, 'Success');
-                        }else{
-                            $vendor->otp        = $random;
-                            $vendor->save();
-                            $this->sendSms($vendor->mobile,$random);
-                            $data               = [
-                                'otp'           => $random,
-                                'verified'      => 0,
-                            ];
-                            return $this->sendResponse($data, 'false');
-                        }
-                    }
-                }
-            }else{
-                return $this->sendError('Vendor Blocked/Suspended, pLease Contact Admin','',200);
-            }
-                
-        }else{
-            $vendor                     = new User();
-            $vendor->mobile             = $request->mobile;
-            $vendor->otp                = $random;
-            $vendor->user_type          = '2';
-            $vendor->save();
-            $this->sendSms($vendor->mobile,$random);
-            $data = [
-                'otp'           => $random,
-                'verified'      => 0,
-                'vendor_id'     => $vendor->id,
-            ];
-            return $this->sendResponse($data, 'false');
-        }
-    }
     /**
-     *
-     */
-    public function vendorRegistration(Request $request){
-        try {
-            $rules = [
-                'email'                 => 'required|unique:users,email'
-            ];
-            $messages = [
-                'email.required'        => 'Email is required',
-            ];
-            $validator = Validator::make(request()->all(), $rules, $messages);
-            if ($validator->fails()) {
-                return $this->sendError($validator->errors()->first(),'',200);
-            }
-            $mobile             = $request->mobile;
-            $name               = $request->name;
-            $otp                = $request->otp;
-            $password           = $request->password;
-            $email              = $request->email;
-            $vendor             = User::where('mobile',$mobile)->where('status','active')->where('user_type','2')->first();
-            if($vendor){
-                if($vendor->otp==$otp){
-                    $vendor->name                   = $name;
-                    $vendor->email                  = $email;
-                    $vendor->password               = Hash::make($password);
-                    $vendor->otp                    = '0';
-                    $vendor->verified               = '1';
-                    $vendor->save();
-                    Auth::login($vendor);
-                    $user                           = Auth::user(); 
-                    $success['token']               = $user->createToken('MyApp')-> accessToken; 
-                    return $this->sendResponse($success, 'Vendor Registered Successfully');
-                }else{
-                    return $this->sendError('OTP Miss Match','',200);
-                }
-            }else{
-                return $this->sendError('No Vendor Found','',200);
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-    /**
-     * 
-     */
-    public function vendorBusinessDetail(Request $request){
-        try{
-            $rules = [
-                'reg_business_name'             => 'required',
-                'email_id'                      => 'required|unique:vendor_details,email_id'
-            ];
-            $messages = [
-                'reg_business_name.required'    => 'Business Name is required',
-            ];
-            $validator = Validator::make(request()->all(), $rules, $messages);
-            if ($validator->fails()) {
-                return $this->sendError($validator->errors()->first(),'',200);
-            }
-            $user = Auth::user()->id;
-            if($user){
-                $vendor = User::where('id',$user)->where('status','active')->where('user_type','2')->first();
-                if($vendor){
-                    $vendor_details                     = new VendorDetail();
-                    $vendor_details->vendor_id          = $vendor->id;
-                    $vendor_details->reg_business_name  = $request->reg_business_name;
-                    $vendor_details->shop_category      = $request->shop_category;
-                    $vendor_details->business_category  = $request->business_category;
-                    $vendor_details->shop_name          = $request->shop_name;
-                    $vendor_details->gst_no             = $request->gst_no;
-                    $vendor_details->mobile_no          = $request->mobile_no;
-                    $vendor_details->email_id           = $request->email_id;
-                    $vendor_details->address1           = $request->address1;
-                    $vendor_details->address2           = $request->address2;
-                    $vendor_details->district           = $request->district;
-                    $vendor_details->state              = $request->state;
-                    $vendor_details->pin                = $request->pin;
-                    $vendor_details->location           = $request->location;
-                    if ($request->hasFile('business_logo')) {
-                        $filenameWithExt                = $request->file('business_logo')->getClientOriginalName();
-                        $filename                       = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-                        $extension                      = $request->file('business_logo')->getClientOriginalExtension();
-                        $fileNameToStore                = 'business_'.uniqid().'.'.$extension;
-                        $path                           = $request->file('business_logo')->storeAs('public/business/', $fileNameToStore);
-                        $vendor_details->business_logo  = $fileNameToStore;
-                    }
-                    $vendor_details->save();
-                    if($vendor_details&& $vendor)  {
-                        $vendor->details = '1';
-                        $vendor->save();
-                        return $this->sendResponse($vendor_details, 'Success');
-                    }
-                }else{
-                    return $this->sendError('No Vendor Found','',200);
-                }
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-    /**
-     * 
-     */
-    public function vendorDetail(Request $request){ 
-        try{
-            $user_id    = Auth::user()->id;
-            $user       = User::select('id','user_type')->where('user_type','2')->where('id',$user_id)->first();
-            if(!$user){
-                return $this->sendError('No Vendor Found','',200);
-            }else{
-                $vendor                     = User::where('id',$user_id)->where('status','active')->where('user_type','2')->first();
-                if($vendor->vendorDetail!=""){
-                    $vendor_plans           = $vendor->vendorDetail->planDetail;
-                    if($vendor->vendorDetail->planDetail!=""){
-                        $vendor_plan_details    = $vendor->vendorDetail->planDetail->plans;
-                    }else{
-                        $vendor_plan_details    = null;
-                    }
-                }else{
-                    $vendor_plans           = null;
-                    $vendor_plan_details    = null;
-                }
-                $vendor['details']          = (int)$vendor->details;
-                if($vendor){
-                    return $this->sendResponse($vendor, 'Success');
-                }else{
-                    return $this->sendError('No Vendor Found','',200);
-                }
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-    /**
-     * 
-     */
-    public function getCategoryList(Request $request){ 
-        try{
-            $user_id    = Auth::user()->id;
-            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
-            if(!$user){
-                return $this->sendError('No Vendor Found','',200);
-            }
-            else{
-                if($request->category_id!=""){
-                    $category = Category::select('id','title','description')->where('id',$request->category_id)->where('status','active')->first();
-                }else{
-                    $category = Category::select('id','title','description')->where('status','active')->get();
-                }
-                if($category){
-                    return $this->sendResponse($category, 'Success');
-                }else{
-                    return $this->sendError('No Vendor Found','',200);
-                }
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-    /**
-     * 
-     */
-    public function getBusinessCategoryList(Request $request){ 
-        try{
-            $user_id    = Auth::user()->id;
-            $user       = User::select('id','user_type','name','mobile','email')->where('user_type','2')->where('id',$user_id)->first();
-            if(!$user){
-                return $this->sendError('No Vendor Found','',200);
-            }
-            else{
-                $category = BusinessCategory::select('id','title','description')->where('status','active')->get();
-                if($category){
-                    return $this->sendResponse($category, 'Success');
-                }else{
-                    return $this->sendError('No Vendor Found','',200);
-                }
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-    /**
-     *
-     */
-    public function changeCustomerToVendor(Request $request){
-        $mobile         = $request->mobile;
-        $vendor         = User::where('status','active')->where('mobile',$mobile)->first();
-        $random         = random_int(100000, 999999);
-        if($vendor){
-            if($vendor->user_type=='2'){
-                return $this->sendError('Already A Vendor','',200);
-            }
-            if($vendor->user_type=='3'){
-                return $this->sendError('UnAuthorized User','',200);
-            }
-            if($vendor->user_type=='0'){
-                if($request->otp!=""){
-                    if($request->otp==$vendor->otp){
-                        $vendor->otp                = '0';
-                        $vendor->user_type          = '2';
-                        $vendor->save();
-                        Auth::login($vendor);
-                        $user = Auth::user(); 
-                        $success['token']   =  $user->createToken('MyApp')-> accessToken; 
-                        return $this->sendResponse($success, 'User Type Changed successfully.');
-                    }else{
-                        return $this->sendError('OTP Miss Match','',200);
-                    }
-                }else{
-                    if($vendor->verified=='1'){
-                        $vendor->otp        = $random;
-                        $vendor->save();
-                        $this->sendSms($vendor->mobile,$random);
-                        $data = [
-                            'otp'           => $random,
-                            'verified'      => 1,
-                        ];
-                        return $this->sendResponse($data, 'Success');
-                    }else{
-                        $vendor->otp        = $random;
-                        $vendor->save();
-                        $this->sendSms($vendor->mobile,$random);
-                        $data               = [
-                            'otp'           => $random,
-                            'verified'      => 0,
-                        ];
-                        return $this->sendResponse($data, 'Success');
-                    }
-                }
-            }
-        }else{
-            return $this->sendError('No Customer Found','',200);
-        }
-    }
-    /**
-     * 
-     */
-    public function saveVendorPlanDetail(Request $request){ 
-        
-        try{
-            $user_id    = Auth::user()->id;
-            $user       = User::select('id','user_type','name','mobile','email')->where('user_type','2')->where('id',$user_id)->first();
-            if(!$user){
-                return $this->sendError('No Vendor Found','',200);
-            }else{
-                    $transaction    = Transaction::where('order_id',$request->order_id)->first();
-                    $plan           = PlanMaster::where('id',$transaction->plan_id)->first();
-                    if(!$plan){
-                        return $this->sendError('No Plan Found','',200);
-                    }
-                    if($request->payment_status=='paid'){
-                        $vendor_plan                    = new VendorPlan();
-                        $vendor_plan->order_id          = $request->payment_id;
-                        $vendor_plan->vendor_id         = $user->id;
-                        $vendor_plan->plan_id           = $transaction->plan_id;
-                        $vendor_plan->payment_status    = $request->payment_status;
-                        $vendor_plan->save();
-                        if($vendor_plan){
-                            $vendor_detail                  = VendorDetail::where('vendor_id',$user->id)->first();
-                            $vendor_detail->plan_id         = $vendor_plan->id;
-                            $vendor_detail->save();
-                            $transaction->payment_id        = $request->payment_id;
-                            $transaction->payment_status    = 'paid';
-                            $transaction->save();
-                            return $this->sendResponse($vendor_plan, 'Success');
-                        }else{
-                            return $this->sendError('Not Authorized User','',200);
-                        }
-                    }else{
-                            $transaction->payment_id        = $request->payment_id;
-                            $transaction->payment_status    = 'notpaid';
-                            $transaction->save();
-                            return $this->sendResponse($transaction, 'Success');
-                    }
-            }
-        }catch(Exception $e){
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-    }
-     /**
      *
      */
     public function customerLogin(Request $request){
@@ -386,29 +38,19 @@ class ApiController extends BaseController
             if($customer->user_type=='3'){
                 return $this->sendError('UnAuthorized User','',200);
             }
-            if($customer->user_type=='0'||$customer->user_type=='2'){
+            if($customer->user_type=='0'){
                 if($request->otp!=""){
                     if($request->otp==$customer->otp){
-                        $customer->otp        = '0';
+                        $customer->otp      = '0';
                         $customer->save();
                         Auth::login($customer);
-                        $user = Auth::user(); 
+                        $user               = Auth::user(); 
                         $success['token']   =  $user->createToken('MyApp')-> accessToken; 
                         return $this->sendResponse($success, 'User login successfully.');
                     }else{
                         return $this->sendError('OTP Miss Match','',200);
                     }
                 }else{
-                    if($customer->verified=="1"){
-                        $customer->otp        = $random;
-                        $customer->save();
-                        $this->sendSms($customer->mobile,$random);
-                        $data = [
-                            'otp'           => $random,
-                            'verified'      => 1,
-                        ];
-                        return $this->sendResponse($data, 'Success');
-                    }else{
                         $customer->otp        = $random;
                         $customer->save();
                         $this->sendSms($customer->mobile,$random);
@@ -418,7 +60,6 @@ class ApiController extends BaseController
                         ];
                         return $this->sendResponse($data, 'false');
                     }
-                }
             }
         }else{
             $customer                     = new User();
@@ -472,6 +113,32 @@ class ApiController extends BaseController
             }
         }else{
             return $this->sendError('No customer Found','',200);
+        }
+    }
+    /**
+     * 
+     */
+    public function getCategoryList(Request $request){ 
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No Vendor Found','',200);
+            }
+            else{
+                if($request->category_id!=""){
+                    $category = Category::select('id','title','description')->where('id',$request->category_id)->where('status','active')->first();
+                }else{
+                    $category = Category::select('id','title','description')->where('status','active')->get();
+                }
+                if($category){
+                    return $this->sendResponse($category, 'Success');
+                }else{
+                    return $this->sendError('No Vendor Found','',200);
+                }
+            }
+        }catch(Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
     }
     /**
