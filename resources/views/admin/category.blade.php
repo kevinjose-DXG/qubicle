@@ -100,7 +100,12 @@
                   </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Parent Id</label>
-                     <input type="text" class="form-control" id="parent_id" name="parent_id" placeholder="Parent Category">
+                      <select name="parent_id" id="parent_id" class="form-control">
+                        <option value="">--Select--</option>
+                        @foreach ($category as $row)
+                          <option value="{{$row->id}}">{{$row->title}}</option>
+                        @endforeach
+                      </select>
                   </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
@@ -189,6 +194,7 @@
               $('#modal-add-category').modal('show');
               $('.modal-title').html("Edit Category");
               $('#category').val(data.category.title);
+              $('#parent_id').val(data.category.parent_id);
               $('#description').val(data.category.description);
               $(".addBtn").text('Update');
               $('#category_id').val(data.category.id);

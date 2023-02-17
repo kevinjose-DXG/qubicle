@@ -15,7 +15,7 @@ class CategoryController extends Controller
      *
      */
     public function showCategory(){
-        $category   = Category::select('id','title','status','description')->get();
+        $category   = Category::select('id','title','status','description','parent_id','image')->get();
         $data       = [
             'category' => $category
         ];
@@ -51,8 +51,15 @@ class CategoryController extends Controller
                 $category->image                = $fileNameToStore;
             }
                 $category->title	            = $request->category;
-                $category->parent_id	        = $request->parent_id;
-                $category->title	            = $request->category;
+                if($request->parent_id==""){
+                    $parent_id = '0';
+                }else{
+                    $parent_id = $request->parent_id;
+                    $parent     = Category::where('id',$request->parent_id)->first();
+                    $child      = $parent->child +1;
+                    $category->child = $child;
+                }
+                $category->parent_id	        = $parent_id;
                 $category->description          = $request->description;
                 $category->save();
             if($category){
