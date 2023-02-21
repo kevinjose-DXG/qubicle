@@ -16,7 +16,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{route('showSlider')}}" class="nav-link" id="slider_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Slider</p>
@@ -39,14 +39,14 @@
                 <i class="nav-icon fa fa-clone"></i>
               <p>Location</p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{route('showCategory')}}" class="nav-link" id="category_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Category</p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{route('showBusinessCategory')}}" class="nav-link" id="business_category_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Business Category</p>
@@ -87,14 +87,14 @@
                 <i class="nav-icon fa fa-clone"></i>
               <p>Pending Flyers</p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{route('showCustomer')}}" class="nav-link" id="customer_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Customers</p>
             </a>
           </li>
-          <li class="nav-item" id="report_menu">
+          <!-- <li class="nav-item" id="report_menu">
               <a href="#" class="nav-link">
               <i class="nav-icon far fa-edit"></i>
               <p>Report
@@ -109,6 +109,6 @@
                       </a>
                   </li>
               </ul>
-          </li>
+          </li> -->
         </ul>
       </nav>

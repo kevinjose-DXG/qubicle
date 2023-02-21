@@ -53,7 +53,7 @@ class ApiController extends BaseController
                 }else{
                         $customer->otp        = $random;
                         $customer->save();
-                        $this->sendSms($customer->mobile,$random);
+                        //$this->sendSms($customer->mobile,$random);
                         $data               = [
                             'otp'           => $random,
                             'verified'      => 0,
@@ -67,7 +67,7 @@ class ApiController extends BaseController
             $customer->otp                = $random;
             $customer->user_type          = '0';
             $customer->save();
-            $this->sendSms($customer->mobile,$random);
+            //$this->sendSms($customer->mobile,$random);
             $data = [
                 'otp'           => $random,
                 'verified'      => 0,

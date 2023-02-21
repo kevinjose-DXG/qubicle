@@ -111,6 +111,7 @@
                      <label for="exampleInputEmail1">Icon</label>
                      <input type="file" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
                   </div>
+                  <div class="form-group editImage"></div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Description</label>
                      <textarea class="form-control" id="description" name="description"></textarea>
@@ -181,6 +182,7 @@
           });
       },
   });
+  //edit Category
   $('body').on('click', '.editCategory', function (event) {
       event.preventDefault();
       var id = $(this).data('id');
@@ -196,6 +198,7 @@
               $('#category').val(data.category.title);
               $('#parent_id').val(data.category.parent_id);
               $('#description').val(data.category.description);
+              $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/category/'+data.category.image+'/>');
               $(".addBtn").text('Update');
               $('#category_id').val(data.category.id);
           },
