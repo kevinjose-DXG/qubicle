@@ -20,7 +20,7 @@ class SubCategoryController extends Controller
             'subcategory' => $subcategory,
             'category'      => $category
         ];
-        return view('admin.subcategory',$data);
+        return view('admin.subCategory',$data);
     }
      /**
      *
