@@ -35,7 +35,7 @@ class CategoryController extends Controller
             ];
                 $validator = Validator::make(request()->all(), $rules, $messages);
             if ($validator->fails()) {
-                return response()->json(['status' => false, 'response' => $validator->errors()->first()]);
+                return response()->json(['status' => false, 'message' => $validator->errors()->first()]);
             }
             if($request->category_id!=""){
                 $category               = Category::where('id',$request->category_id)->first();
@@ -52,6 +52,19 @@ class CategoryController extends Controller
             }
                 $category->title	            = $request->category;
                 $category->description          = $request->description;
+                if(empty($request->phone)){
+                    $phone	            = '0';
+                }else{
+                    $phone	            = '1';
+                }
+                $category->phone          = $phone;
+                if(empty($request->customizable)){
+                    $customizable		            = '0';
+                }else{
+                    $customizable		            = '1';
+                }
+                $category->customizable             = $customizable;
+                $category->price	                = $request->price;
                 $category->save();
             if($category){
                 return response()->json(['status'=>true,'message'=>'Success']);
@@ -73,7 +86,6 @@ class CategoryController extends Controller
         ];
         return response()->json($data);
     }
-
     /**
      *
      */
@@ -88,5 +100,4 @@ class CategoryController extends Controller
             return response()->json(['status'=>false, 'message'=>'Error']);
         }
     }
-
 }

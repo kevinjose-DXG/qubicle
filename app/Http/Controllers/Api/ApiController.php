@@ -144,6 +144,30 @@ class ApiController extends BaseController
     /**
      * 
      */
+    public function getSubCategoryLisByCatid(Request $request){ 
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No customer Found','',200);
+            }
+            else{
+                if($request->category_id!=""){
+                    $category = Category::with('subcategory')->where('id',$request->category_id)->where('status','active')->first();
+                }
+                if($category){
+                    return $this->sendResponse($category, 'Success');
+                }else{
+                    return $this->sendError('No Category Found','',200);
+                }
+            }
+        }catch(Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+    /**
+     * 
+     */
     public function getPlanDetails(Request $request){ 
         try{
             $user_id    = Auth::user()->id;

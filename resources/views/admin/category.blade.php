@@ -98,6 +98,18 @@
                      <label for="exampleInputEmail1">{{ __('page.name') }}</label>
                      <input type="text" class="form-control" id="category" name="category" placeholder="Category">
                   </div>
+                  <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="phone" name="phone" >
+                     <label for="phone" class="form-check-label">Phone</label>
+                    </div>
+                  <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="customizable" name="customizable">
+                     <label for="customizable" class="form-check-label">Customizable</label>
+                  </div>
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Price</label>
+                     <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                  </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
                      <input type="file" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
@@ -135,9 +147,15 @@
           'category': {
               required: true,
           },
+          'price':{
+            number:true
+          }
       },
       messages: {
           category: "Please enter category",
+          price:{
+            number:"Please enter a valid number"
+          }
       },
       submitHandler: function (form) {
           var form        = document.getElementById("categoryForm");
@@ -187,8 +205,14 @@
               $('#modal-add-category').modal('show');
               $('.modal-title').html("Edit Category");
               $('#category').val(data.category.title);
-              $('#parent_id').val(data.category.parent_id);
               $('#description').val(data.category.description);
+              if(data.category.phone=='1'){
+                $('#phone').prop("checked", true);
+              }
+              if(data.category.customizable=='1'){
+                $('#customizable').prop("checked", true);
+              }
+              $('#price').val(data.category.price);
               $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/category/'+data.category.image+'/>');
               $(".addBtn").text('Update');
               $('#category_id').val(data.category.id);

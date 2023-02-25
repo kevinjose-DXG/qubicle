@@ -46,13 +46,13 @@
               <p>Category</p>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a href="{{route('showBusinessCategory')}}" class="nav-link" id="business_category_menu">
+           <li class="nav-item">
+            <a href="{{route('showSubCategory')}}" class="nav-link" id="sub_category_menu">
                 <i class="nav-icon fa fa-clone"></i>
-              <p>Business Category</p>
+              <p>Sub Category</p>
             </a>
           </li>
-          <li class="nav-item">
+         <!-- <li class="nav-item">
             <a href="{{route('showDesigned')}}" class="nav-link" id="designed_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Designed By</p>

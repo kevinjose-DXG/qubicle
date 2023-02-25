@@ -27,7 +27,7 @@
                     <!-- general form elements -->
                     <div class="card">
                         <div class="card-header">
-                          <a class="btn btn-success" data-toggle="modal" data-target="#modal-add-category"> {{ __('page.create_new_category') }}</a>
+                          <a class="btn btn-success" data-toggle="modal" data-target="#modal-add-SubCategory"> {{ __('page.create_new_category') }}</a>
                         </div>
                         @if ($message = Session::get('success'))
                           <div class="alert alert-success alert-dismissible">
@@ -40,18 +40,20 @@
                                 <thead>
                                     <tr>
                                     <th>{{ __('page.no') }}</th>
-                                    <th>{{ __('page.name') }}</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
                                     <th>{{ __('page.status') }}</th>
                                     <th width="280px">{{ __('page.action') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($category as $row)
+                                  @foreach($subcategory as $row)
                                     @php
                                     $image =  asset('/').$row->image ;
                                     @endphp
                                   <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $row->category->title }}</td>
                                     <td>{{ $row->title }}</td>
                                     <td>
                                       <input data-id="{{$row->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" @if($row->status=="active") checked @endif>
@@ -82,34 +84,46 @@
   </div>
   <!-- /.content-wrapper -->
   <div class="modal fade" id="modal-add-SubCategory" role="dialog">
-   <div class="modal-dialog">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h4 class="modal-title">{{ __('page.create_new_SubCategory') }}</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-            <form action="javascript:;" name="SubCategoryForm" id="categoryForm" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Sub Category</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="javascript:;" name="SubCategoryForm" id="SubCategoryForm" enctype="multipart/form-data">
               @csrf
               <div class="modal-body">
                 <div class="card-body">
                   <div class="form-group">
                      <label for="exampleInputEmail1">{{ __('page.name') }}</label>
-                     <input type="text" class="form-control" id="SubCategory" name="SubCategory" placeholder="SubCategory">
+                     <input type="text" class="form-control" id="sub_category" name="sub_category" placeholder="SubCategory">
                   </div>
                   <div class="form-group">
-                     <label for="exampleInputEmail1">Parent Id</label>
-                      <select name="parent_id" id="parent_id" class="form-control">
+                     <label for="exampleInputEmail1">Category</label>
+                      <select name="category_id" id="category_id" class="form-control">
                         <option value="">--Select--</option>
-                        @foreach ($SubCategory as $row)
+                        @foreach ($category as $row)
                           <option value="{{$row->id}}">{{$row->title}}</option>
                         @endforeach
                       </select>
                   </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
-                     <input type="file" class="form-control" id="SubCategory_icon" name="SubCategory_icon" placeholder="SubCategory Icon">
+                     <input type="file" class="form-control" id="subcategory_icon" name="subcategory_icon" placeholder="Sub Category Icon">
+                  </div>
+                  <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="phone" name="phone" >
+                     <label for="phone" class="form-check-label">Phone</label>
+                    </div>
+                  <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="customizable" name="customizable">
+                     <label for="customizable" class="form-check-label">Customizable</label>
+                  </div>
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Price</label>
+                     <input type="text" class="form-control" id="price" name="price" placeholder="Price">
                   </div>
                   <div class="form-group editImage"></div>
                   <div class="form-group">
@@ -120,7 +134,7 @@
                 <!-- /.card-body -->
               </div>
               <div class="modal-footer justify-content-between">
-                <input type="hidden" name="SubCategory_id" id="SubCategory_id" value="">
+                <input type="hidden" name="subcategory_id" id="subcategory_id" value="">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('page.close') }}</button>
                 <button class="btn btn-primary addBtn">{{ __('page.submit') }}</button>
               </div>
@@ -141,12 +155,12 @@
       },
       ignore: [],
       rules: {
-          'SubCategory': {
+          'sub_category': {
               required: true,
           },
       },
       messages: {
-          SubCategory: "Please enter SubCategory",
+          sub_category: "Please enter Sub Category",
       },
       submitHandler: function (form) {
           var form        = document.getElementById("SubCategoryForm");
@@ -188,19 +202,26 @@
       var id = $(this).data('id');
       $.ajax({
           type: "get",
-          url: "SubCategory/edit/"+id,
+          url: "{{route('editSubCategory','')}}"+"/"+id,
           processData: false,
           dataType: "json",
           success: function (data) {
               //console.log(data);
               $('#modal-add-SubCategory').modal('show');
-              $('.modal-title').html("Edit SubCategory");
-              $('#SubCategory').val(data.SubCategory.title);
-              $('#parent_id').val(data.SubCategory.parent_id);
-              $('#description').val(data.SubCategory.description);
-              $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/SubCategory/'+data.SubCategory.image+'/>');
+              $('.modal-title').html("Edit Sub Category");
+              $('#sub_category').val(data.subcategory.title);
+              $('#category_id').val(data.subcategory.category_id);
+              if(data.subcategory.phone=='1'){
+                $('#phone').prop("checked", true);
+              }
+              if(data.subcategory.customizable=='1'){
+                $('#customizable').prop("checked", true);
+              }
+              $('#price').val(data.subcategory.price);
+              $('#description').val(data.subcategory.description);
+              $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/subcategory/'+data.subcategory.image+'/>');
               $(".addBtn").text('Update');
-              $('#SubCategory_id').val(data.SubCategory.id);
+              $('#subcategory_id').val(data.subcategory.id);
           },
       });
   });
@@ -214,7 +235,7 @@
           type: "GET",
           dataType: "json",
           url: url,
-          data: {'status': status, 'SubCategory_id': cat_id},
+          data: {'status': status, 'subcategory_id': cat_id},
             success: function(data){
               if(data.status == true) {
                   toastr.success(data.message);
