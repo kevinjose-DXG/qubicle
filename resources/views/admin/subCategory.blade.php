@@ -7,7 +7,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Category</h1>
+            <h1>Sub Category</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -60,7 +60,7 @@
                                     @php
                                         $catid = Crypt::encrypt($row->id);
                                     @endphp
-                                        <a class="btn btn-primary editCategory" data-id="{{$row->id}}" href="">{{ __('page.edit') }}</a>
+                                        <a class="btn btn-primary editSubCategory" data-id="{{$row->id}}" href="">{{ __('page.edit') }}</a>
                                     </td>
                                   </tr>
                                   @endforeach
@@ -81,26 +81,35 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <div class="modal fade" id="modal-add-category" role="dialog">
+  <div class="modal fade" id="modal-add-SubCategory" role="dialog">
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <h4 class="modal-title">{{ __('page.create_new_category') }}</h4>
+            <h4 class="modal-title">{{ __('page.create_new_SubCategory') }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
-            <form action="javascript:;" name="categoryForm" id="categoryForm" enctype="multipart/form-data">
+            <form action="javascript:;" name="SubCategoryForm" id="categoryForm" enctype="multipart/form-data">
               @csrf
               <div class="modal-body">
                 <div class="card-body">
                   <div class="form-group">
                      <label for="exampleInputEmail1">{{ __('page.name') }}</label>
-                     <input type="text" class="form-control" id="category" name="category" placeholder="Category">
+                     <input type="text" class="form-control" id="SubCategory" name="SubCategory" placeholder="SubCategory">
+                  </div>
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Parent Id</label>
+                      <select name="parent_id" id="parent_id" class="form-control">
+                        <option value="">--Select--</option>
+                        @foreach ($SubCategory as $row)
+                          <option value="{{$row->id}}">{{$row->title}}</option>
+                        @endforeach
+                      </select>
                   </div>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
-                     <input type="file" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
+                     <input type="file" class="form-control" id="SubCategory_icon" name="SubCategory_icon" placeholder="SubCategory Icon">
                   </div>
                   <div class="form-group editImage"></div>
                   <div class="form-group">
@@ -111,7 +120,7 @@
                 <!-- /.card-body -->
               </div>
               <div class="modal-footer justify-content-between">
-                <input type="hidden" name="category_id" id="category_id" value="">
+                <input type="hidden" name="SubCategory_id" id="SubCategory_id" value="">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('page.close') }}</button>
                 <button class="btn btn-primary addBtn">{{ __('page.submit') }}</button>
               </div>
@@ -124,29 +133,29 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-  $('#category_menu').addClass('active');
+  $('#SubCategory_menu').addClass('active');
   //submit form
-  $("#categoryForm").validate({
+  $("#SubCategoryForm").validate({
       normalizer : function (value) {
           return $.trim(value);
       },
       ignore: [],
       rules: {
-          'category': {
+          'SubCategory': {
               required: true,
           },
       },
       messages: {
-          category: "Please enter category",
+          SubCategory: "Please enter SubCategory",
       },
       submitHandler: function (form) {
-          var form        = document.getElementById("categoryForm");
+          var form        = document.getElementById("SubCategoryForm");
           var formData    = new FormData(form);
           $(".addBtn").prop("disabled", true);
           $.ajax({
               data: formData,
               type: "post",
-              url: "{{ route('saveCategory') }}",
+              url: "{{ route('saveSubCategory') }}",
               processData: false,
               dataType: "json",
               contentType: false, // The content type used when sending data to the server.
@@ -163,7 +172,7 @@
                       $(".addBtn").text('Submit');
                       $(".addBtn").prop("disabled", false);
                           toastr.success(data.message);
-                          setTimeout(function(){location.href="{{route('showCategory')}}"} , 3000);
+                          setTimeout(function(){location.href="{{route('showSubCategory')}}"} , 3000);
                   }else{
                       toastr.error(data.message);
                       $(".addBtn").text('Submit');
@@ -173,25 +182,25 @@
           });
       },
   });
-  //edit Category
-  $('body').on('click', '.editCategory', function (event) {
+  //edit SubCategory
+  $('body').on('click', '.editSubCategory', function (event) {
       event.preventDefault();
       var id = $(this).data('id');
       $.ajax({
           type: "get",
-          url: "category/edit/"+id,
+          url: "SubCategory/edit/"+id,
           processData: false,
           dataType: "json",
           success: function (data) {
               //console.log(data);
-              $('#modal-add-category').modal('show');
-              $('.modal-title').html("Edit Category");
-              $('#category').val(data.category.title);
-              $('#parent_id').val(data.category.parent_id);
-              $('#description').val(data.category.description);
-              $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/category/'+data.category.image+'/>');
+              $('#modal-add-SubCategory').modal('show');
+              $('.modal-title').html("Edit SubCategory");
+              $('#SubCategory').val(data.SubCategory.title);
+              $('#parent_id').val(data.SubCategory.parent_id);
+              $('#description').val(data.SubCategory.description);
+              $('.editImage').html('<img style="width:100px" src='+'{{asset('/')}}public/storage/SubCategory/'+data.SubCategory.image+'/>');
               $(".addBtn").text('Update');
-              $('#category_id').val(data.category.id);
+              $('#SubCategory_id').val(data.SubCategory.id);
           },
       });
   });
@@ -200,12 +209,12 @@
       event.preventDefault();
       var status  = $(this).prop('checked') == true ? 'active' : 'inactive';
       var cat_id = $(this).data('id');
-      let url = "{{route('changeCategoryStatus')}}";
+      let url = "{{route('changeSubCategoryStatus')}}";
         $.ajax({
           type: "GET",
           dataType: "json",
           url: url,
-          data: {'status': status, 'category_id': cat_id},
+          data: {'status': status, 'SubCategory_id': cat_id},
             success: function(data){
               if(data.status == true) {
                   toastr.success(data.message);
@@ -217,9 +226,9 @@
         });
   });
   $(".modal").on("hidden.bs.modal", function(){
-    $(".modal-add-category").html("");
+    $(".modal-add-SubCategory").html("");
     $(this).find('form').trigger('reset');
-    $('#modal-add-category').modal('hide');
+    $('#modal-add-SubCategory').modal('hide');
   });
 </script>
 @endsection

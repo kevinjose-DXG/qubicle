@@ -123,18 +123,18 @@ class ApiController extends BaseController
             $user_id    = Auth::user()->id;
             $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
             if(!$user){
-                return $this->sendError('No Vendor Found','',200);
+                return $this->sendError('No customer Found','',200);
             }
             else{
                 if($request->category_id!=""){
-                    $category = Category::select('id','title','description')->where('id',$request->category_id)->where('status','active')->first();
+                    $category = Category::select('id','title','description','image','phone','customizable','price','status')->where('id',$request->category_id)->where('status','active')->first();
                 }else{
-                    $category = Category::select('id','title','description')->where('status','active')->get();
+                    $category = Category::select('id','title','description','image','phone','customizable','price','status')->where('status','active')->get();
                 }
                 if($category){
                     return $this->sendResponse($category, 'Success');
                 }else{
-                    return $this->sendError('No Vendor Found','',200);
+                    return $this->sendError('No Category Found','',200);
                 }
             }
         }catch(Exception $e){
