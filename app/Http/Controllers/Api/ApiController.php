@@ -153,7 +153,7 @@ class ApiController extends BaseController
             }
             else{
                 if($request->category_id!=""){
-                    $category = Category::with('subcategory')->where('id',$request->category_id)->where('status','active')->first();
+                    $category = Category::with('SubCategories')->where('id',$request->category_id)->where('status','active')->first();
                 }
                 if($category){
                     return $this->sendResponse($category, 'Success');
