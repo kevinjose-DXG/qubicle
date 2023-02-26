@@ -48,7 +48,7 @@ Route::prefix('customer')->group(function () {
     Route::post('/registration', [ApiController::class, 'customerRegistration'])->name('customerRegistration');
     Route::post('/category/list', [ApiController::class, 'getCategoryList'])->middleware(['auth:api']);
     Route::post('subcategory/list', [ApiController::class, 'getSubCategoryLisByCatid'])->middleware(['auth:api']);
-    Route::get('brand/list', [ApiController::class, 'getBrandList'])->middleware(['auth:api']);
+    Route::post('brand/list', [ApiController::class, 'getBrandList'])->middleware(['auth:api']);
     Route::get('/details', [ApiController::class, 'getCustomerDetails'])->middleware(['auth:api']);
     Route::get('/sliders', [ApiController::class, 'getSliders'])->middleware(['auth:api']);
     
