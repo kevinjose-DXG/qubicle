@@ -58,6 +58,12 @@
               <p>Brand</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('showModel')}}" class="nav-link" id="model_menu">
+                <i class="nav-icon fa fa-clone"></i>
+              <p>Model</p>
+            </a>
+          </li>
          <!-- <li class="nav-item">
             <a href="{{route('showDesigned')}}" class="nav-link" id="designed_menu">
                 <i class="nav-icon fa fa-clone"></i>

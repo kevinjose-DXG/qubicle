@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Brand extends Model
+class BrandModel extends Model
 {
     use HasFactory;
-    public function brandmodel()
+
+    public function brands()
     {
-        return $this->hasMany(BrandModel::class,'brand_id','id');
+        return $this->hasOne(Brand::class,'id','brand_id');
     }
 }

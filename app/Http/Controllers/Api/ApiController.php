@@ -24,6 +24,7 @@ use App\Models\Location;
 use App\Models\DesignedBy;
 use App\Models\Slider;
 use App\Models\Brand;
+use App\Models\BrandModel;
 use Exception;
 
 class ApiController extends BaseController
@@ -186,6 +187,30 @@ class ApiController extends BaseController
                     return $this->sendResponse($brand, 'Success');
                 }else{
                     return $this->sendError('No Category Found','',200);
+                }
+            }
+        }catch(Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+    /**
+     * 
+     */
+    public function getModelListByBrandId(Request $request){ 
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No customer Found','',200);
+            }
+            else{
+                if($request->brand_id!=""){
+                    $brand = Brand::with('brandmodel')->where('id',$request->brand_id)->where('status','active')->first();
+                }
+                if($brand){
+                    return $this->sendResponse($brand, 'Success');
+                }else{
+                    return $this->sendError('No Brand Found','',200);
                 }
             }
         }catch(Exception $e){

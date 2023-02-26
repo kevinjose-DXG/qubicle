@@ -14,6 +14,7 @@ use App\Http\Controllers\DesignedController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ModelController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,6 +47,11 @@ use App\Http\Controllers\BrandController;
         Route::any('/brand/save', [BrandController::class, 'saveBrand'])->name('saveBrand');
         Route::any('/brand/edit/{id}', [BrandController::class, 'editBrand'])->name('editBrand');
         Route::any('/brand/change/status', [BrandController::class, 'changeBrandStatus'])->name('changeBrandStatus');
+         //Model
+         Route::any('model', [ModelController::class, 'showModel'])->name('showModel');
+         Route::any('model/save', [ModelController::class, 'saveModel'])->name('saveModel');
+         Route::any('model/edit/{id}', [ModelController::class, 'editModel'])->name('editModel');
+         Route::any('model/change/status', [ModelController::class, 'changeModelStatus'])->name('changeModelStatus');
         //Business Category
         Route::any('/category/business', [BusinessController::class, 'showBusinessCategory'])->name('showBusinessCategory');
         Route::any('/category/business/save', [BusinessController::class, 'saveBusinessCategory'])->name('saveBusinessCategory');
