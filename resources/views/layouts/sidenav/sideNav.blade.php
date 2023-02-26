@@ -52,6 +52,12 @@
               <p>Sub Category</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('showBrand')}}" class="nav-link" id="brand_menu">
+                <i class="nav-icon fa fa-clone"></i>
+              <p>Brand</p>
+            </a>
+          </li>
          <!-- <li class="nav-item">
             <a href="{{route('showDesigned')}}" class="nav-link" id="designed_menu">
                 <i class="nav-icon fa fa-clone"></i>

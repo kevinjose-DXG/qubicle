@@ -13,6 +13,7 @@ use App\Http\Controllers\VendorFlyerController;
 use App\Http\Controllers\DesignedController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\BrandController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,11 +36,16 @@ use App\Http\Controllers\SubCategoryController;
         Route::any('/category/save', [CategoryController::class, 'saveCategory'])->name('saveCategory');
         Route::any('/category/edit/{id}', [CategoryController::class, 'editCategory'])->name('editCategory');
         Route::any('/category/change/status', [CategoryController::class, 'changeCategoryStatus'])->name('changeCategoryStatus');
-        //category
+        //Sub category
         Route::any('/subcategory', [SubCategoryController::class, 'showSubCategory'])->name('showSubCategory');
         Route::any('/subcategory/save', [SubCategoryController::class, 'saveSubCategory'])->name('saveSubCategory');
         Route::any('/subcategory/edit/{id}', [SubCategoryController::class, 'editSubCategory'])->name('editSubCategory');
         Route::any('/subcategory/change/status', [SubCategoryController::class, 'changeSubCategoryStatus'])->name('changeSubCategoryStatus');
+        //Brand
+        Route::any('/brand', [BrandController::class, 'showBrand'])->name('showBrand');
+        Route::any('/brand/save', [BrandController::class, 'saveBrand'])->name('saveBrand');
+        Route::any('/brand/edit/{id}', [BrandController::class, 'editBrand'])->name('editBrand');
+        Route::any('/brand/change/status', [BrandController::class, 'changeBrandStatus'])->name('changeBrandStatus');
         //Business Category
         Route::any('/category/business', [BusinessController::class, 'showBusinessCategory'])->name('showBusinessCategory');
         Route::any('/category/business/save', [BusinessController::class, 'saveBusinessCategory'])->name('saveBusinessCategory');

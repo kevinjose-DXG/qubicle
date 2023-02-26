@@ -23,6 +23,7 @@ use App\Models\District;
 use App\Models\Location;
 use App\Models\DesignedBy;
 use App\Models\Slider;
+use App\Models\Brand;
 use Exception;
 
 class ApiController extends BaseController
@@ -157,6 +158,32 @@ class ApiController extends BaseController
                 }
                 if($category){
                     return $this->sendResponse($category, 'Success');
+                }else{
+                    return $this->sendError('No Category Found','',200);
+                }
+            }
+        }catch(Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+    /**
+     * 
+     */
+    public function getBrandList(Request $request){ 
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No customer Found','',200);
+            }
+            else{
+                if($request->brand_id!=""){
+                    $brand = Brand::select('id','title','description','image','status')->where('id',$request->brand_id)->where('status','active')->first();
+                }else{
+                    $brand = Brand::select('id','title','description','image','status')->where('status','active')->get();
+                }
+                if($brand){
+                    return $this->sendResponse($brand, 'Success');
                 }else{
                     return $this->sendError('No Category Found','',200);
                 }

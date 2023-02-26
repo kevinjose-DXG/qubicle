@@ -14,6 +14,9 @@ use Exception;
 
 class VendorFlyerController extends Controller
 {
+    /**
+     * 
+     */
     public function showVendorFlyer(){
         $flyer  = VendorFlyer::where('admin_approved','0')->get();
         $data   = ['flyer' => $flyer];
