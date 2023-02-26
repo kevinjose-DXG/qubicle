@@ -43,7 +43,7 @@ class BrandController extends Controller
                 $filenameWithExt                = $request->file('brand_icon')->getClientOriginalName();
                 $filename                       = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                 $extension                      = $request->file('brand_icon')->getClientOriginalExtension();
-                $fileNameToStore                = 'subcat_'.uniqid().'.'.$extension;
+                $fileNameToStore                = 'brand_'.uniqid().'.'.$extension;
                 $path                           = $request->file('brand_icon')->storeAs('public/brand/', $fileNameToStore);
                 $brand->image                   = $fileNameToStore;
             }
