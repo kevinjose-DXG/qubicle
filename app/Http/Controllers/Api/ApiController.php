@@ -283,4 +283,20 @@ class ApiController extends BaseController
             return $this->sendError('Cart Empty','',200);
         }
     }
+    /**
+     * 
+     */
+    public function getCartList(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $cart       = Cart::where('customer_id',$user->id)->get();
+        if($cart){
+            return $this->sendResponse($cart, 'Success');
+        }else{
+            return $this->sendError('Cart Empty','',200);
+        }
+    }
 }
