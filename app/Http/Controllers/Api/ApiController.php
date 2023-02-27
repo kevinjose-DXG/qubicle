@@ -11,21 +11,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Category;
-use App\Models\VendorDetail;
-use App\Models\BusinessCategory;
-use App\Models\VendorPlan;
-use App\Models\VendorFlyer;
-use App\Models\VendorFlyerDetail;
-use App\Models\PlanMaster;
-use App\Models\Transaction;
-use App\Models\State;
-use App\Models\District;
-use App\Models\Location;
-use App\Models\DesignedBy;
-use App\Models\Slider;
 use App\Models\Brand;
 use App\Models\BrandModel;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Exception;
 
 class ApiController extends BaseController
@@ -297,6 +287,61 @@ class ApiController extends BaseController
             return $this->sendResponse($cart, 'Success');
         }else{
             return $this->sendError('Cart Empty','',200);
+        }
+    }
+     /**
+     *
+     */
+    public function createOrder(Request $request){
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No customer Found','',200);
+            }
+                $maxValue                       = Order::max('order_no');
+                $order                          = new Order();
+                if($maxValue){
+                    $maxValue                   = $maxValue+1;
+                    $order_no                   = str_pad($maxValue, 7, '0', STR_PAD_LEFT);
+                }else{
+                    $order_no                   = str_pad('1', 7, '0', STR_PAD_LEFT);
+                }
+                
+            if($user){
+                $order->order_no                        = $order_no;
+                $order->address_id                      = '1';
+                $order->customer_id                     = $user->id;
+                $order->sub_total                       = $request->sub_total;
+                $order->discount_amount                 = $request->discount_amount;
+                $order->tax                             = $request->tax;
+                $order->delivery_charge                 = $request->delivery_charge;
+                $order->grand_total	                    = $request->grand_total;
+                $order->order_date	                    = date('Y-m-d');
+                $order->save();
+                $ordercount                             = sizeof($request['product_name']);
+                for($i=0;$i<$ordercount;$i++){
+                    if($request->product_name[$i]!=""){
+                        $order_details                = new OrderDetail();
+                        $order_details->order_id      = $order->id;
+                        $order_details->product_id    = $request->product_name[$i];
+                        $order_details->quantity      = $request->quantity[$i];
+                        $order_details->price         = $request->price[$i];
+                        $order_details->save();
+                        
+                    }
+                }
+                $clearCart = Cart::where('customer_id',$user->id)->delete();
+                if($order&&$clearCart){
+                    return response()->json(['status'=>true,'message'=>'Success']);
+                }else{
+                    return response()->json(['status'=>false,'message'=>'Error']);
+                }
+            }else{
+                return response()->json(['status'=>false,'message'=>'No Customer Found']);
+            }
+        } catch (Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
     }
 }

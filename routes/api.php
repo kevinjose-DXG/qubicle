@@ -52,6 +52,7 @@ Route::prefix('customer')->group(function () {
     Route::post('model/list', [ApiController::class, 'getModelListByBrandId'])->middleware(['auth:api']);
     Route::post('add/to/cart', [ApiController::class, 'addToCart'])->middleware(['auth:api']);
     Route::get('cart/list', [ApiController::class, 'getCartList'])->middleware(['auth:api']);
+    Route::post('order/create', [ApiController::class, 'createOrder'])->middleware(['auth:api']);
     Route::get('/details', [ApiController::class, 'getCustomerDetails'])->middleware(['auth:api']);
     Route::get('/sliders', [ApiController::class, 'getSliders'])->middleware(['auth:api']);
     

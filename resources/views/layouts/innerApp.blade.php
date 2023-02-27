@@ -83,7 +83,7 @@
   <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
-      <img src="{{ asset('/')  }}images/mail_logo.png" alt="AdminLTE Logo" class="brand-image img" style="opacity: .8">
+      <img src="{{ asset('/')  }}images/logo.png" alt="AdminLTE Logo" class="brand-image img" style="opacity: .8">
       <span class="brand-text font-weight-light">GIFTX</span>
     </a>
 

@@ -16,6 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id')->nullable();
+            $table->integer('address_id')->nullable();
             $table->string('order_no')->nullable();
             $table->date('order_date')->nullable();
             $table->enum('order_status',['onprocess','confirmed','shipped','deliverd','cancelled'])->default('onprocess');

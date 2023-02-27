@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>model</h1>
+            <h1>Model</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">{{ __('page.dashboard') }}</a></li>
-              <li class="breadcrumb-item active">model</li>
+              <li class="breadcrumb-item active">Model</li>
             </ol>
           </div>
         </div>
@@ -87,7 +87,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Create model</h4>
+                <h4 class="modal-title">Create Model</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
