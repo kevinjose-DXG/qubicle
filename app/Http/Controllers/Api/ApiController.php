@@ -319,14 +319,14 @@ class ApiController extends BaseController
                 $cart               = Cart::where('customer_id',$user->id)->get();
                 foreach($cart as $row){
                     $sub_total          += $row->price;
-                    $category_id[]      = $row->category_id;
-                    $sub_category_id[]  = $row->sub_category_id;
-                    $brand_id[]         = $row->brand_id;
-                    $modal_id[]         = $row->modal_id;
-                    $image_customize[]  = $row->image_customize;
-                    $text_customize[]   = $row->text_customize;
-                    $price[]            = $row->price;
-                    $quantity[]         = $row->quantity;
+                    $category_id[]      = $row->category_id?$row->category_id:'0';
+                    $sub_category_id[]  = $row->sub_category_id?$row->sub_category_id:'0';
+                    $brand_id[]         = $row->brand_id?$row->brand_id:'0';
+                    $modal_id[]         = $row->modal_id?$row->modal_id:'0';
+                    $image_customize[]  = $row->image_customize?$row->image_customize:[];
+                    $text_customize[]   = $row->text_customize?$row->text_customize:[];
+                    $price[]            = $row->price?$row->price:'0.00';
+                    $quantity[]         = $row->quantity?$row->quantity:'0';
                 }
                 $order->address_id                = '1';
                 $order->customer_id               = $user->id;
