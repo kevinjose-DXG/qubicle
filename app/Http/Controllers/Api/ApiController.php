@@ -308,14 +308,6 @@ class ApiController extends BaseController
                     $order_no                   = str_pad('1', 7, '0', STR_PAD_LEFT);
                 }
                 $sub_total          = 0;
-                $category_id        = [];
-                $sub_category_id    = [];
-                $brand_id           = [];
-                $modal_id           = [];
-                $image_customize    = [];
-                $text_customize     = [];
-                $price              = [];
-                $quantity           = [];
                 $cart               = Cart::where('customer_id',$user->id)->get();
                 foreach($cart as $row){
                     $sub_total                          += $row->price;
@@ -351,6 +343,41 @@ class ApiController extends BaseController
                 }
         } catch (Exception $e){
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+     /**
+     * 
+     */
+    public function orderList(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $orders       = Order::where('customer_id',$user->id)->get();
+        if($orders){
+            return $this->sendResponse($orders, 'Success');
+        }else{
+            return $this->sendError('No Orders Found','',200);
+        }
+    }
+    /**
+     * 
+     */
+    public function orderDetails(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $orders     = Order::with('orderdetail')
+                            ->where('customer_id',$user->id)
+                            ->where('order_no',$request->order_no)
+                            ->first();
+        if($orders){
+            return $this->sendResponse($orders, 'Success');
+        }else{
+            return $this->sendError('No Orders Found','',200);
         }
     }
 }
