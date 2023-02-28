@@ -333,9 +333,9 @@ class ApiController extends BaseController
                 $order->order_no                  = $order_no;
                 $order->order_date	              = date('Y-m-d');
                 $order->sub_total                 = $sub_total;
-                $order->discount_amount           = $request->discount_amount;
-                $order->tax                       = $request->tax;
-                $order->delivery_charge           = $request->delivery_charge;
+                $order->discount_amount           = $request->discount_amount?$request->discount_amount:'0.00';
+                $order->tax                       = $request->tax?$request->tax:'0.00';
+                $order->delivery_charge           = $request->delivery_charge?$request->delivery_charge:'0.00';
                 $order->grand_total	              = $sub_total;
                 $order->save();
                 $ordercount                       = sizeof($category_id);
