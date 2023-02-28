@@ -318,42 +318,32 @@ class ApiController extends BaseController
                 $quantity           = [];
                 $cart               = Cart::where('customer_id',$user->id)->get();
                 foreach($cart as $row){
-                    $sub_total          += $row->price;
-                    $category_id[]      = $row->category_id?$row->category_id:'0';
-                    $sub_category_id[]  = $row->sub_category_id?$row->sub_category_id:'0';
-                    $brand_id[]         = $row->brand_id?$row->brand_id:'0';
-                    $modal_id[]         = $row->modal_id?$row->modal_id:'0';
-                    $image_customize[]  = $row->image_customize?$row->image_customize:[];
-                    $text_customize[]   = $row->text_customize?$row->text_customize:[];
-                    $price[]            = $row->price?$row->price:'0.00';
-                    $quantity[]         = $row->quantity?$row->quantity:'0';
+                    $sub_total                          += $row->price;
+                    $order_details                      = new OrderDetail();
+                    $order_details->order_id            = $order_no;
+                    $order_details->customer_id         = $user->id;
+                    $order_details->category_id         = $row->category_id;
+                    $order_details->sub_category_id     = $row->sub_category_id;
+                    $order_details->brand_id            = $row->brand_id;
+                    $order_details->modal_id            = $row->modal_id;
+                    $order_details->image_customize     = $row->customize_image;
+                    $order_details->text_customize      = $row->customize_text;
+                    $order_details->quantity            = $row->quantity;
+                    $order_details->price               = $row->price;
+                    $order_details->order_date	        = date('Y-m-d');
+                    $order_details->save();
                 }
                 $order->address_id                = '1';
                 $order->customer_id               = $user->id;
                 $order->order_no                  = $order_no;
                 $order->order_date	              = date('Y-m-d');
                 $order->sub_total                 = $sub_total;
-                $order->discount_amount           = $request->discount_amount?$request->discount_amount:'0.00';
-                $order->tax                       = $request->tax?$request->tax:'0.00';
-                $order->delivery_charge           = $request->delivery_charge?$request->delivery_charge:'0.00';
+                $order->discount_amount           = '0.00';
+                $order->tax                       = '0.00';
+                $order->delivery_charge           = '0.00';
                 $order->grand_total	              = $sub_total;
                 $order->save();
-                $ordercount                       = sizeof($category_id);
-                for($i=0;$i<$ordercount;$i++){
-                    $order_details                      = new OrderDetail();
-                    $order_details->order_id            = $order->id;
-                    $order_details->customer_id         = $user->id;
-                    $order_details->category_id         = $category_id[$i];
-                    $order_details->sub_category_id     = $sub_category_id[$i];
-                    $order_details->brand_id            = $brand_id[$i];
-                    $order_details->modal_id            = $modal_id[$i];
-                    $order_details->image_customize     = $image_customize[$i];
-                    $order_details->text_customize      = $text_customize[$i];
-                    $order_details->quantity            = $request->quantity[$i];
-                    $order_details->price               = $request->price[$i];
-                    $order_details->save();
-                }
-                if($order&&$order_details){
+                if($order){
                     $clearCart = Cart::where('customer_id',$user->id)->delete();
                     return response()->json(['status'=>true,'message'=>'Success']);
                 }else{
