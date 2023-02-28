@@ -307,39 +307,58 @@ class ApiController extends BaseController
                 }else{
                     $order_no                   = str_pad('1', 7, '0', STR_PAD_LEFT);
                 }
-                
-            if($user){
-                $order->order_no                        = $order_no;
-                $order->address_id                      = '1';
-                $order->customer_id                     = $user->id;
-                $order->sub_total                       = $request->sub_total;
-                $order->discount_amount                 = $request->discount_amount;
-                $order->tax                             = $request->tax;
-                $order->delivery_charge                 = $request->delivery_charge;
-                $order->grand_total	                    = $request->grand_total;
-                $order->order_date	                    = date('Y-m-d');
-                $order->save();
-                $ordercount                             = sizeof($request['product_name']);
-                for($i=0;$i<$ordercount;$i++){
-                    if($request->product_name[$i]!=""){
-                        $order_details                = new OrderDetail();
-                        $order_details->order_id      = $order->id;
-                        $order_details->product_id    = $request->product_name[$i];
-                        $order_details->quantity      = $request->quantity[$i];
-                        $order_details->price         = $request->price[$i];
-                        $order_details->save();
-                        
-                    }
+                $sub_total          = 0;
+                $category_id        = [];
+                $sub_category_id    = [];
+                $brand_id           = [];
+                $modal_id           = [];
+                $image_customize    = [];
+                $text_customize     = [];
+                $price              = [];
+                $quantity           = [];
+                $cart               = Cart::where('customer_id',$user->id)->get();
+                foreach($cart as $row){
+                    $sub_total          += $row->price;
+                    $category_id[]      = $row->category_id;
+                    $sub_category_id[]  = $row->sub_category_id;
+                    $brand_id[]         = $row->brand_id;
+                    $modal_id[]         = $row->modal_id;
+                    $image_customize[]  = $row->image_customize;
+                    $text_customize[]   = $row->text_customize;
+                    $price[]            = $row->price;
+                    $quantity[]         = $row->quantity;
                 }
-                $clearCart = Cart::where('customer_id',$user->id)->delete();
-                if($order&&$clearCart){
+                $order->address_id                = '1';
+                $order->customer_id               = $user->id;
+                $order->order_no                  = $order_no;
+                $order->order_date	              = date('Y-m-d');
+                $order->sub_total                 = $sub_total;
+                $order->discount_amount           = $request->discount_amount;
+                $order->tax                       = $request->tax;
+                $order->delivery_charge           = $request->delivery_charge;
+                $order->grand_total	              = $sub_total;
+                $order->save();
+                $ordercount                       = sizeof($category_id);
+                for($i=0;$i<$ordercount;$i++){
+                    $order_details                      = new OrderDetail();
+                    $order_details->order_id            = $order->id;
+                    $order_details->customer_id         = $user->id;
+                    $order_details->category_id         = $category_id[$i];
+                    $order_details->sub_category_id     = $sub_category_id[$i];
+                    $order_details->brand_id            = $brand_id[$i];
+                    $order_details->modal_id            = $modal_id[$i];
+                    $order_details->image_customize     = $image_customize[$i];
+                    $order_details->text_customize      = $text_customize[$i];
+                    $order_details->quantity            = $request->quantity[$i];
+                    $order_details->price               = $request->price[$i];
+                    $order_details->save();
+                }
+                if($order&&$order_details){
+                    $clearCart = Cart::where('customer_id',$user->id)->delete();
                     return response()->json(['status'=>true,'message'=>'Success']);
                 }else{
                     return response()->json(['status'=>false,'message'=>'Error']);
                 }
-            }else{
-                return response()->json(['status'=>false,'message'=>'No Customer Found']);
-            }
         } catch (Exception $e){
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
