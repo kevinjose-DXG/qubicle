@@ -15,6 +15,7 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ModelController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,9 +26,6 @@ use App\Http\Controllers\ModelController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
     Route::any('/', [AdminController::class, 'showLogin'])->name('admin.login');
     Route::group(['middleware' => ['auth:web']], function () {
         Route::any('/dashboard', [AdminController::class, 'showDashboard'])->name('dashboard');
@@ -47,16 +45,21 @@ use App\Http\Controllers\ModelController;
         Route::any('/brand/save', [BrandController::class, 'saveBrand'])->name('saveBrand');
         Route::any('/brand/edit/{id}', [BrandController::class, 'editBrand'])->name('editBrand');
         Route::any('/brand/change/status', [BrandController::class, 'changeBrandStatus'])->name('changeBrandStatus');
-         //Model
-         Route::any('model', [ModelController::class, 'showModel'])->name('showModel');
-         Route::any('model/save', [ModelController::class, 'saveModel'])->name('saveModel');
-         Route::any('model/edit/{id}', [ModelController::class, 'editModel'])->name('editModel');
-         Route::any('model/change/status', [ModelController::class, 'changeModelStatus'])->name('changeModelStatus');
-        //Business Category
-        Route::any('/category/business', [BusinessController::class, 'showBusinessCategory'])->name('showBusinessCategory');
-        Route::any('/category/business/save', [BusinessController::class, 'saveBusinessCategory'])->name('saveBusinessCategory');
-        Route::any('/category/business/edit/{id}', [BusinessController::class, 'editBusinessCategory'])->name('editBusinessCategory');
-        Route::any('/category/business/change/status', [BusinessController::class, 'changeBusinessCategoryStatus'])->name('changeBusinessCategoryStatus');
+        //Model
+        Route::any('model', [ModelController::class, 'showModel'])->name('showModel');
+        Route::any('model/save', [ModelController::class, 'saveModel'])->name('saveModel');
+        Route::any('model/edit/{id}', [ModelController::class, 'editModel'])->name('editModel');
+        Route::any('model/change/status', [ModelController::class, 'changeModelStatus'])->name('changeModelStatus');
+       //Orders
+        Route::any('/order', [OrderController::class, 'showOrder'])->name('showOrder');
+        Route::any('/order/save', [OrderController::class, 'saveOrder'])->name('saveOrder');
+        Route::any('/order/view/{id}', [OrderController::class, 'viewOrder'])->name('viewOrder');
+        Route::any('/order/change/status', [OrderController::class, 'changeOrderstatus'])->name('changeOrderstatus');
+        Route::any('/order/filter', [OrderController::class, 'filterOrder'])->name('filterOrder');
+        Route::any('/order/approval', [OrderController::class, 'flyerApprovalByAdmin'])->name('flyerApprovalByAdmin');
+        Route::any('/order/delete', [OrderController::class, 'flyerDeleteByAdmin'])->name('flyerDeleteByAdmin');
+        Route::any('/order/flyer/status', [OrderController::class, 'flyerStatusChange'])->name('flyerStatusChange');
+        Route::any('/order/admin/delete', [OrderController::class, 'deleteFlyerByAdmin'])->name('deleteFlyerByAdmin');
         //plan master
         Route::any('/plan', [PlanController::class, 'showPlan'])->name('showPlan');
         Route::any('/plan/create', [PlanController::class, 'createPlan'])->name('createPlan');
@@ -76,7 +79,6 @@ use App\Http\Controllers\ModelController;
         Route::any('/vendor/edit/{id}', [VendorController::class, 'editVendor'])->name('editVendor');
         Route::any('/vendor/fetch/district', [VendorController::class, 'fetchVendorDistrict'])->name('fetchVendorDistrict');
         Route::any('/vendor/reject/reason', [VendorController::class, 'saveRejectReason'])->name('saveRejectReason');
-        
         //State
         Route::any('/state', [StateController::class, 'showState'])->name('showState');
         Route::any('/state/save', [StateController::class, 'saveState'])->name('saveState');
@@ -125,5 +127,4 @@ use App\Http\Controllers\ModelController;
         Route::any('/customer/filter', [AdminController::class, 'filterCustomer'])->name('filterCustomer');
         Route::any('/customer/change/status', [AdminController::class, 'changeCustomerStatus'])->name('changeCustomerStatus');
     });
-
 require __DIR__.'/auth.php';

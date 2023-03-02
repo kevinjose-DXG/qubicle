@@ -36,16 +36,16 @@
                         @endif
                           <!-- /.card-header -->
                           <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                              <table id="example2" class="table table-bordered table-hover">
                                 <thead>
-                                <tr>
+                                  <tr>
                                     <th>{{ __('page.no') }}</th>
                                     <th>{{ __('page.name') }}</th>
                                     <th>Mrp</th>
                                     <th>Duration</th>
                                     <th>{{ __('page.status') }}</th>
                                     <th width="280px">{{ __('page.action') }}</th>
-                                </tr>
+                                  </tr>
                                 </thead>
                                 <tbody>
                                   @foreach($plan as $row)
@@ -58,15 +58,15 @@
                                       <input data-id="{{$row->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" @if($row->status=="active") checked @endif>
                                     </td>
                                     <td>
-                                    @php
-                                        $catid = Crypt::encrypt($row->id);
-                                    @endphp
+                                        @php
+                                          $catid = Crypt::encrypt($row->id);
+                                        @endphp
                                         <a class="btn btn-primary editplan" data-id="{{$row->id}}" href="">{{ __('page.edit') }}</a>
                                     </td>
                                   </tr>
                                   @endforeach
                                 </tbody>
-                            </table>
+                              </table>
                           </div>
                           <!-- /.card-body -->
                       </div>

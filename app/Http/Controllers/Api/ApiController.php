@@ -228,7 +228,7 @@ class ApiController extends BaseController
             'quantity'                  => 'required'
         ];
         $messages = [
-            'category_id'      => 'category is required',
+            'category_id.required'      => 'category is required',
             'price'            => 'price is required',
             'quantity'        => "Quantity Required"
         ];
@@ -378,6 +378,36 @@ class ApiController extends BaseController
             return $this->sendResponse($orders, 'Success');
         }else{
             return $this->sendError('No Orders Found','',200);
+        }
+    }
+     /**
+     * 
+     */
+    public function updateCart(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $rules = [
+            'cart_id'                   => 'required',
+            'quantity'                  => 'required'
+        ];
+        $messages = [
+            'cart_id.required'          => 'Cart Id is required',
+            'quantity.required'         => 'Quantity is required',
+        ];
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(),'',200);
+        }
+        $cart           = Cart::where('id',$request->cart_id)->where('customer_id',$user->id)->first();
+        $cart->quantity = $request->quantity;
+        $cart->save();
+        if($cart){
+            return $this->sendResponse($cart, 'Success');
+        }else{
+            return $this->sendError('Cart Not Updated','',200);
         }
     }
 }

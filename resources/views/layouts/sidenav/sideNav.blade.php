@@ -64,6 +64,12 @@
               <p>Model</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('showOrder')}}" class="nav-link" id="order_menu">
+                <i class="nav-icon fa fa-clone"></i>
+              <p>Orders</p>
+            </a>
+          </li>
          <!-- <li class="nav-item">
             <a href="{{route('showDesigned')}}" class="nav-link" id="designed_menu">
                 <i class="nav-icon fa fa-clone"></i>
