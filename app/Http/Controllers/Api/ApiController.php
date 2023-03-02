@@ -354,7 +354,7 @@ class ApiController extends BaseController
         if(!$user){
             return $this->sendError('No customer Found','',200);
         }
-        $orders       = Order::where('customer_id',$user->id)->get();
+        $orders       = Order::where('customer_id',$user->id)->orderBy('id','desc')->get();
         if($orders){
             return $this->sendResponse($orders, 'Success');
         }else{
@@ -460,6 +460,32 @@ class ApiController extends BaseController
         $orders                 = Order::where('order_no',$request->order_no)->where('customer_id',$user->id)->first();
         $orders->order_status   = $request->order_status;
         $orders->save();
+        if($orders){
+            return $this->sendResponse($orders, 'Success');
+        }else{
+            return $this->sendError('No Orders Found','',200);
+        }
+    }
+     /**
+     * 
+     */
+    public function orderListByStatus(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $rules = [
+            'order_status'              => 'required'
+        ];
+        $messages = [
+            'order_status.required'     =>'Order Status Required'         
+        ];
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(),'',200);
+        }
+        $orders       = Order::where('order_status',$request->order_status)->where('customer_id',$user->id)->orderBy('order_no','desc')->get();
         if($orders){
             return $this->sendResponse($orders, 'Success');
         }else{
