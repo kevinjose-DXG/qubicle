@@ -410,4 +410,30 @@ class ApiController extends BaseController
             return $this->sendError('Cart Not Updated','',200);
         }
     }
+    /**
+     * 
+     */
+    public function deleteCartItem(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $rules = [
+            'cart_id'                   => 'required',
+        ];
+        $messages = [
+            'cart_id.required'          => 'Cart Id is required',
+        ];
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(),'',200);
+        }
+        $cart  = Cart::where('id',$request->cart_id)->where('customer_id',$user->id)->delete();
+        if($cart){
+            return $this->sendResponse($cart, 'Success');
+        }else{
+            return $this->sendError('Cart Item Not Deleted','',200);
+        }
+    }
 }
