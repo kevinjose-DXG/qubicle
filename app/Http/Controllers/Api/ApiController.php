@@ -436,4 +436,34 @@ class ApiController extends BaseController
             return $this->sendError('Cart Item Not Deleted','',200);
         }
     }
+     /**
+     * 
+     */
+    public function orderChangeStatus(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $rules = [
+            'order_no'                   => 'required',
+            'order_status'              => 'required'
+        ];
+        $messages = [
+            'order_no.required'          => 'OrderNo is required',
+            'order_status.required'     =>'Order Status Required'         
+        ];
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(),'',200);
+        }
+        $orders                 = Order::where('order_no',$request->order_no)->where('customer_id',$user->id)->first();
+        $orders->order_status   = $request->order_status;
+        $orders->save();
+        if($orders){
+            return $this->sendResponse($orders, 'Success');
+        }else{
+            return $this->sendError('No Orders Found','',200);
+        }
+    }
 }
