@@ -16,6 +16,7 @@ use App\Models\BrandModel;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Profile;
 use Exception;
 
 class ApiController extends BaseController
@@ -490,6 +491,84 @@ class ApiController extends BaseController
             return $this->sendResponse($orders, 'Success');
         }else{
             return $this->sendError('No Orders Found','',200);
+        }
+    }
+     /**
+     * 
+     */
+    public function saveAddress(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $rules = [
+            'email'                 => 'required|unique:users,email,'.$user->id,
+            'mobile'                => 'required|unique:users,mobile,'.$user->id,
+            'name'                  => 'required',
+            'address1'              => 'required',
+            'address2'              => 'required',
+            'landmark'              => 'required',
+            'city'                  => 'required',
+            'state'                 => 'required',
+            'pincode'               => 'required',
+        ];
+        $messages = [
+            'email.required'        => 'email is Required',
+            'mobile.required'       => 'mobile is Required',
+            'name.required'         => 'name is Required',
+            'address1.required'     => 'Address1 is Required',
+            'address2.required'     => 'Address2 is Required',            
+            'landmark.required'     => 'Landmark is Required',  
+            'city.required'         => 'City is Required',
+            'state.required'        => 'state is Required' ,
+            'pincode.required'      => 'pincode is Required' ,
+
+        ];
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(),'',200);
+        }
+        $user->name         = $request->name;
+        $user->email        = $request->email;
+        $user->mobile       = $request->mobile;
+        $user->save();
+        $profile_count  = Profile::where('customer_id',$user->id)->count();
+        if($profile_count>0){
+            $profile = Profile::where('customer_id',$user->id)->first();
+        }else{
+            $profile                = new Profile();
+            $profile->customer_id   = $user->id;
+        }
+            $profile->customer_id   = $user->id;
+            $profile->address1      = $request->address1;
+            $profile->address2      = $request->address2;
+            $profile->landmark      = $request->landmark;
+            $profile->city          = $request->city;
+            $profile->state         = $request->state;
+            $profile->pincode       = $request->pincode;
+            $profile->default       = '1';
+            $profile->save();
+            if($profile){
+                return $this->sendResponse($profile, 'Success');
+            }else{
+                return $this->sendError('No Profile Found','',200);
+            }
+    }
+     /**
+     * 
+     */
+    public function getAddress(){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $profile    = User::with('profileDetail')->where('id',$user->id)->first();
+        if($profile){
+            return $this->sendResponse($profile, 'Success');
+        }else{
+            return $this->sendError('No profile Found','',200);
         }
     }
 }
