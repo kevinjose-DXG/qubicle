@@ -17,6 +17,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Profile;
+use App\Models\SampleProduct;
 use Exception;
 
 class ApiController extends BaseController
@@ -283,7 +284,7 @@ class ApiController extends BaseController
         if(!$user){
             return $this->sendError('No customer Found','',200);
         }
-        $cart       = Cart::where('customer_id',$user->id)->get();
+        $cart       = Cart::with('customer','category','subcategory','brands','brandmodel')->where('customer_id',$user->id)->get();
         if($cart){
             return $this->sendResponse($cart, 'Success');
         }else{
@@ -375,6 +376,19 @@ class ApiController extends BaseController
                             ->where('customer_id',$user->id)
                             ->where('order_no',$request->order_no)
                             ->first();
+        foreach($orders->orderdetail as $key =>$row){
+            $orders['orderdetail'][$key]['customer_id'] = $row->customer->id;
+            $orders['orderdetail'][$key]['category_id'] = $row->category->id;
+            if($row->subcategory!=""){
+                $orders['orderdetail'][$key]['sub_category_id'] = $row->subcategory->id;
+            }
+            if($row->brands!=""){
+                $orders['orderdetail'][$key]['brand_id'] = $row->brands->id;
+            }
+            if($row->brandmodel!=""){
+                $orders['orderdetail'][$key]['modal_id'] = $row->brandmodel->id;
+            }
+        }
         if($orders){
             return $this->sendResponse($orders, 'Success');
         }else{
@@ -569,6 +583,23 @@ class ApiController extends BaseController
             return $this->sendResponse($profile, 'Success');
         }else{
             return $this->sendError('No profile Found','',200);
+        }
+    }
+     /**
+     * 
+     */
+    public function getSampleProduct(Request $request){ 
+        $user_id    = Auth::user()->id;
+        $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+        if(!$user){
+            return $this->sendError('No customer Found','',200);
+        }
+        $category = $request->category_id;
+        $sample_products    = SampleProduct::with('category')->where('category_id',$category)->get();
+        if($sample_products){
+            return $this->sendResponse($sample_products, 'Success');
+        }else{
+            return $this->sendError('No sample products Found','',200);
         }
     }
 }

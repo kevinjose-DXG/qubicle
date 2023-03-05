@@ -35,34 +35,47 @@
                     @endif
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <table id="datatable-vendor-list" class="table table-bordered table-hover">
+                      <table id="datatable-order-list" class="table table-bordered table-hover">
                         <thead>
                           <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Mobile</th>
-                            <th scope="col">OTP</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Order No</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Payment Status</th>
+                            <th scope="col">Price</th>
                             <th scope="col">Action</th>
                           </tr>
                           <tr>
                             <th scope="col">
-                            <input type="text" class="form-control" placeholder="Name" name="name" id="col0_filter" value="">
+                              <input type="text" class="form-control" placeholder="order_no" name="order_no" id="col0_filter" value="">
                             </th>
                             <th scope="col">
-                                <input type="text" class="form-control" placeholder="Email" name="email" id="col1_filter" value="">
+                                
                             </th>
                             <th scope="col">
-                                <input type="text" class="form-control" placeholder="Mobile" name="mobile" id="col2_filter" value="">
+                                
                             </th>
                             <th scope="col">
-                            </th>
-                            <th scope="col">
-                                <select class="form-control" tabindex="1" style="width: 100%" name="status" id="col3_filter">
+                                <select class="form-control" tabindex="1" style="width: 100%" name="order_status" id="col1_filter">
                                   <option value="">All</option>
-                                  <option value="active">Active</option>
-                                  <option value="inactive">Inactive</option>
+                                  <option value="onprocess">on process</option>
+                                  <option value="confirmed">confirmed</option>
+                                  <option value="shipped">shipped</option>
+                                  <option value="deliverd">deliverd</option>
+                                  <option value="cancelled">cancelled</option>
                                 </select>
+                            </th>
+                            <th scope="col">
+                                <select class="form-control" tabindex="1" style="width: 100%" name="payment_status" id="col2_filter">
+                                  <option value="">All</option>
+                                  <option value="paid">paid</option>
+                                  <option value="notpaid">not paid</option>
+                                  <option value="cancelled">cancelled</option>.
+                                  <option value="refunded">Refunded</option>
+                                </select>
+                            </th>
+                            <th scope="col">
                             </th>
                             <th scope="col">
                             </th>
@@ -92,46 +105,44 @@
   <script type="text/javascript">
     $('#vendor_menu').addClass('active');
     $(document).ready(function() {
-        var dataTable = $('#datatable-vendor-list').DataTable({
+        var dataTable = $('#datatable-order-list').DataTable({
           'processing': true,
           'serverSide': true,
           'serverMethod': 'post',
           "searching": false,
           responsive: true,
             'ajax': {
-              'url': "{{ route('filterVendor') }}",
+              'url': "{{ route('filterOrder') }}",
                 'data': function (data) {
                   // Read values
-                  var vendor_name             = $('#col0_filter').val();
-                  var email                   = $('#col1_filter').val();
-                  var mobile                  = $('#col2_filter').val();
-                  var status                  = $('#col3_filter').val();
+                  var order_no                = $('#col0_filter').val();
+                  var order_status            = $('#col1_filter').val();
+                  var payment_status          = $('#col2_filter').val();
                   // Append to data
-                  data.filterByVendor         = vendor_name;
-                  data.filterByEmail          = email;
-                  data.filterByMobile         = mobile;
-                  data.filterByStatus         = status;
+                  data.filterByOrderNo        = order_no;
+                  data.filterByOrderStatus    = order_status;
+                  data.filterByPaymentStatus  = payment_status;
                 }
             },
           'columns': [
-              {data: 'vendor_name'},
-              {data: 'email'},
-              {data: 'mobile'},
-              {data: 'otp'},
-              {data: 'status'},
+              {data: 'order_no'},
+              {data: 'order_date'},
+              {data: 'customer'},
+              {data: 'order_status'},
+              {data: 'payment_status'},
+              {data: 'price'},
               {data: 'actions'},
           ],
         });
-      $('#col0_filter, #col1_filter, #col3_filter').keyup(function () {
+      $('#col0_filter').keyup(function () {
           dataTable.draw();
       });
-      $('#col2_filter, #col4_filter').change(function () {
+      $('#col1_filter, #col2_filter').change(function () {
           $('#col0_filter').val('');
-          $('#col1_filter').val('');
           dataTable.draw();
       });
     });
-    $('#datatable-vendor-list').on('click', '.deleteBtn', function (event) {
+    $('#datatable-order-list').on('click', '.deleteBtn', function (event) {
       let product_id = $(this).data("id");
       let url = "";
       $.ajax({
@@ -151,7 +162,7 @@
           }
       });
     });
-    $('#datatable-vendor-list').on('click', '.statusBtn', function (event) {
+    $('#datatable-order-list').on('click', '.statusBtn', function (event) {
       let vendor_id   = $(this).data("id");
       let status      = $(this).data("prostatus");
       let url         = "{{route('changeOrderstatus')}}";

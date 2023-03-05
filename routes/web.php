@@ -16,6 +16,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SampleProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -126,5 +127,10 @@ use App\Http\Controllers\OrderController;
         Route::any('/customer/list', [AdminController::class, 'showCustomer'])->name('showCustomer');
         Route::any('/customer/filter', [AdminController::class, 'filterCustomer'])->name('filterCustomer');
         Route::any('/customer/change/status', [AdminController::class, 'changeCustomerStatus'])->name('changeCustomerStatus');
+        //Sample Images
+        Route::any('/sampleproduct', [SampleProductController::class, 'showSampleProduct'])->name('showSampleProduct');
+        Route::any('/sampleproduct/save', [SampleProductController::class, 'saveSampleProduct'])->name('saveSampleProduct');
+        Route::any('/sampleproduct/edit/{id}', [SampleProductController::class, 'editSampleProduct'])->name('editSampleProduct');
+        Route::any('/sampleproduct/change/status', [SampleProductController::class, 'changeSampleProductStatus'])->name('changeSampleProductStatus');
     });
 require __DIR__.'/auth.php';

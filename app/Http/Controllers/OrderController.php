@@ -28,50 +28,44 @@ class OrderController extends Controller
         $skip                       = $_POST['start'];
         $rowperpage                 = $_POST['length'];
         // FILTERS
-        $filterByorder             = $_POST['filterByorder'];
-        $filterByEmail              = $_POST['filterByEmail'];
-        $filterByMobile             = $_POST['filterByMobile'];
-        $filterByStatus             = $_POST['filterByStatus'];
+        $filterByOrderNo            = $_POST['filterByOrderNo'];
+        $filterByOrderStatus        = $_POST['filterByOrderStatus'];
+        $filterByPaymentStatus      = $_POST['filterByPaymentStatus'];
         $all_records                = Order::get();
         $totalRecords               = $all_records->count();
         // TOTAL NUMBER OF RECORDS WITH FILTERING
         $all_records_withFilter     = Order::query();
-        if($filterByorder!=''){
-            $all_records_withFilter = $all_records_withFilter->where('name', 'LIKE', "%$filterByorder%");
+        if($filterByOrderNo!=''){
+            $all_records_withFilter = $all_records_withFilter->where('order_no', 'LIKE', "%$filterByOrderNo%");
         }
-        if($filterByEmail!=''){
-            $all_records_withFilter = $all_records_withFilter->where('email', 'LIKE', "%$filterByEmail%");
+        if($filterByOrderStatus!=''){
+            $all_records_withFilter = $all_records_withFilter->where('order_status', '=', $filterByOrderStatus);
         }
-        if($filterByMobile!=''){
-            $all_records_withFilter = $all_records_withFilter->where('mobile', '=', $filterByMobile);
-        }
-        if($filterByStatus != ''){
-            $all_records_withFilter = $all_records_withFilter->where('status', '=', $filterByStatus);
+        if($filterByPaymentStatus!=''){
+            $all_records_withFilter = $all_records_withFilter->where('payment_status', '=', $filterByPaymentStatus);
         }
         $totalRecordsWithFilter     = $all_records_withFilter->count();
-        $all_records_withFilter     = $all_records_withFilter->where('user_type', '=', '2')->where('admin_approved', '=', '1')
+        $all_records_withFilter     = $all_records_withFilter->orderBy('id', 'desc')
             ->offset($skip)
             ->take($rowperpage)
             ->get();
         foreach ($all_records_withFilter as $record) {
-            $mobile                 = $record->mobile;
-            $otp                    = $record->otp;
-            if($record->details=='0'){
-                $actions            = '<a href="'.route('editorder', ['id'=>Crypt::encrypt($record->id)]).'" data-id="{{ $record->id }}" data-field="variant" class="btn btn-warning">Edit</a>';
-            } else {
-                $actions            = '<a href="'.route('editorder', ['id'=>Crypt::encrypt($record->id)]).'" data-id="{{ $record->id }}" data-field="variant" class="btn btn-warning">Edit</a> <a href="'.route('vieworder', ['id'=>Crypt::encrypt($record->id)]).'" data-id="{{ $record->id }}" data-field="variant" class="btn btn-primary">View</a>';
-            }
+            $customer               = $record->customer->name;
+
+            $actions                = '<a href="'.route('viewOrder', ['id'=>Crypt::encrypt($record->id)]).'" data-id="{{ $record->id }}" data-field="variant" class="btn btn-primary">View</a>';
+           
             if($record->status=="active"){
                 $status             = '<a href="#" class="statusBtn btn btn-success" data-id="'.$record->id.'" data-prostatus="'.$record->status.'" >Active</a>';
             } else{
                 $status             = '<a href="#" class="statusBtn btn btn-danger" data-id="'.$record->id.'" data-prostatus="'.$record->status.'">In-Active</a>';
             }
             $data[] = [
-                "order_name"           => $record->name,
-                "email"                 => $record->email,
-                "mobile"                => $mobile,
-                "otp"                   => $otp,
-                "status"                => $status,
+                "order_no"              => $record->order_no,
+                "order_date"            => $record->order_date,
+                "customer"              => $customer,
+                "order_status"          => $record->order_status,
+                "payment_status"        => $record->payment_status ,
+                "price"                 => $record->grand_total,
                 "actions"               => $actions,
             ];
         }

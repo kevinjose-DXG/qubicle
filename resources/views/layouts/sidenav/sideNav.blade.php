@@ -70,6 +70,12 @@
               <p>Orders</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{route('showSampleProduct')}}" class="nav-link" id="sample_product_menu">
+                <i class="nav-icon fa fa-clone"></i>
+              <p>Sample Products</p>
+            </a>
+          </li>
          <!-- <li class="nav-item">
             <a href="{{route('showDesigned')}}" class="nav-link" id="designed_menu">
                 <i class="nav-icon fa fa-clone"></i>
