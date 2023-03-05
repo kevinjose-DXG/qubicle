@@ -649,7 +649,7 @@ class ApiController extends BaseController
             if(!$user){
                 return $this->sendError('No Customer Found','',200);
             }else{
-                $policy            = Policy::where('status','active')->get();
+                $policy  = Policy::where('status','active')->get();
                 if($policy){
                     return $this->sendResponse($policy, 'Success');
                 }else{
