@@ -249,7 +249,7 @@ class ApiController extends BaseController
         $cart->customer_id          =   $user->id;
         $cart->category_id          =   $request->category_id;
         if($request->sub_category_id!=""){
-            $cart->sub_category_id  =   $user->sub_category_id;
+            $cart->sub_category_id  =   $request->sub_category_id;
         }
         if($request->brand_id!=""){
             $cart->brand_id         =   $request->brand_id;
