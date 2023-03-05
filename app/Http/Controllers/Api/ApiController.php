@@ -286,7 +286,21 @@ class ApiController extends BaseController
         if(!$user){
             return $this->sendError('No customer Found','',200);
         }
-        $cart       = Cart::with('customer','category','subcategory','brands','brandmodel')->where('customer_id',$user->id)->get();
+        $cart       = Cart::where('customer_id',$user->id)->get();
+        foreach($cart as $key=> $row){
+            if($row->category!=""){
+                $cart[$key]['category_id']        = $row->category->title;
+            }
+            if($row->subcategory!=""){
+                $cart[$key]['sub_category_id']    = $row->subcategory->title;
+            }
+            if($row->brands!=""){
+                $cart[$key]['brand_id']           = $row->brands->title;
+            }
+            if($row->brandmodel!=""){
+                $cart[$key]['model_id']           = $row->brandmodel->title;
+            }
+        }
         if($cart){
             return $this->sendResponse($cart, 'Success');
         }else{
@@ -379,16 +393,16 @@ class ApiController extends BaseController
                             ->where('order_no',$request->order_no)
                             ->first();
         foreach($orders->orderdetail as $key =>$row){
-            $orders['orderdetail'][$key]['customer_id'] = $row->customer->id;
-            $orders['orderdetail'][$key]['category_id'] = $row->category->id;
+            $orders['orderdetail'][$key]['customer_id'] = $row->customer->name;
+            $orders['orderdetail'][$key]['category_id'] = $row->category->title;
             if($row->subcategory!=""){
-                $orders['orderdetail'][$key]['sub_category_id'] = $row->subcategory->id;
+                $orders['orderdetail'][$key]['sub_category_id'] = $row->subcategory->title;
             }
             if($row->brands!=""){
-                $orders['orderdetail'][$key]['brand_id'] = $row->brands->id;
+                $orders['orderdetail'][$key]['brand_id'] = $row->brands->title;
             }
             if($row->brandmodel!=""){
-                $orders['orderdetail'][$key]['modal_id'] = $row->brandmodel->id;
+                $orders['orderdetail'][$key]['modal_id'] = $row->brandmodel->title;
             }
         }
         if($orders){
