@@ -77,7 +77,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('showSupport')}}" class="nav-link" id="sample_product_menu">
+            <a href="{{route('showSupport')}}" class="nav-link" id="Support_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Support</p>
             </a>
@@ -122,6 +122,12 @@
             <a href="{{route('showCustomer')}}" class="nav-link" id="customer_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Customers</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('showPolicy')}}" class="nav-link" id="policy_menu">
+                <i class="nav-icon fa fa-clone"></i>
+              <p>Policy</p>
             </a>
           </li>
           <!-- <li class="nav-item" id="report_menu">

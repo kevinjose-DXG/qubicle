@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->integer('address_id')->nullable();
             $table->string('order_no')->nullable();
             $table->date('order_date')->nullable();
-            $table->enum('order_status',['onprocess','confirmed','shipped','deliverd','cancelled'])->default('onprocess');
+            $table->enum('order_status',['onprocess','confirmed','shipped','delivered','cancelled'])->default('onprocess');
             $table->enum('payment_status',['paid','notpaid','cancelled','refunded'])->default('paid');
             $table->float('sub_total',8,2)->default('0.00');
             $table->float('delivery_charge',8,2)->default('0.00');

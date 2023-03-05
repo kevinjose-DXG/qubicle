@@ -18,6 +18,7 @@ use App\Http\Controllers\ModelController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SampleProductController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\PolicyController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -138,5 +139,10 @@ use App\Http\Controllers\SupportController;
         Route::any('/support/save', [SupportController::class, 'saveSupport'])->name('saveSupport');
         Route::any('/support/edit/{id}', [SupportController::class, 'editSupport'])->name('editSupport');
         Route::any('/support/change/status', [SupportController::class, 'changeSupportStatus'])->name('changeSupportStatus');
+        //Policy
+        Route::any('/policy', [PolicyController::class, 'showPolicy'])->name('showPolicy');
+        Route::any('/policy/save', [PolicyController::class, 'savePolicy'])->name('savePolicy');
+        Route::any('/policy/edit/{id}', [PolicyController::class, 'editPolicy'])->name('editPolicy');
+        Route::any('/policy/change/status', [PolicyController::class, 'changePolicyStatus'])->name('changePolicyStatus');
     });
 require __DIR__.'/auth.php';

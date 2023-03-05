@@ -19,6 +19,7 @@ use App\Models\OrderDetail;
 use App\Models\Profile;
 use App\Models\SampleProduct;
 use App\Models\Support;
+use App\Models\Policy;
 use Exception;
 
 class ApiController extends BaseController
@@ -618,6 +619,27 @@ class ApiController extends BaseController
                     return $this->sendResponse($support, 'Success');
                 }else{
                     return $this->sendError('No Support Found','',200);
+                }
+            }
+        }catch(Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+    }
+     /**
+     * 
+     */
+    public function getPolicyDetails(Request $request){ 
+        try{
+            $user_id    = Auth::user()->id;
+            $user       = User::select('id','user_type','name','mobile','email')->where('id',$user_id)->first();
+            if(!$user){
+                return $this->sendError('No Customer Found','',200);
+            }else{
+                $policy            = Policy::where('status','active')->get();
+                if($policy){
+                    return $this->sendResponse($policy, 'Success');
+                }else{
+                    return $this->sendError('No policy Found','',200);
                 }
             }
         }catch(Exception $e){
