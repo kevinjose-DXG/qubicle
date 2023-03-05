@@ -40,7 +40,12 @@ class PolicyController extends Controller
             if($request->policy_id!=""){
                 $support                = Policy::where('id',$request->policy_id)->first();
             }else{
-                $support                = new Policy();
+                $support_count         = Policy::where('title',$request->title)->count();
+                if($support_count>0){
+                    return response()->json(['status'=>true,'message'=>'Already Exists']);
+                }else{
+                    $support                = new Policy();
+                }
             }
                 $support->title	        = $request->title;
                 $support->content	    = $request->description;
