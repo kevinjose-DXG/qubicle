@@ -17,6 +17,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SampleProductController;
+use App\Http\Controllers\SupportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -132,5 +133,10 @@ use App\Http\Controllers\SampleProductController;
         Route::any('/sampleproduct/save', [SampleProductController::class, 'saveSampleProduct'])->name('saveSampleProduct');
         Route::any('/sampleproduct/edit/{id}', [SampleProductController::class, 'editSampleProduct'])->name('editSampleProduct');
         Route::any('/sampleproduct/change/status', [SampleProductController::class, 'changeSampleProductStatus'])->name('changeSampleProductStatus');
+        //support
+        Route::any('/support', [SupportController::class, 'showSupport'])->name('showSupport');
+        Route::any('/support/save', [SupportController::class, 'saveSupport'])->name('saveSupport');
+        Route::any('/support/edit/{id}', [SupportController::class, 'editSupport'])->name('editSupport');
+        Route::any('/support/change/status', [SupportController::class, 'changeSupportStatus'])->name('changeSupportStatus');
     });
 require __DIR__.'/auth.php';

@@ -64,4 +64,5 @@ Route::prefix('customer')->group(function () {
     Route::post('address/save', [ApiController::class, 'saveAddress'])->middleware(['auth:api']);
     Route::get('address/list', [ApiController::class, 'getAddress'])->middleware(['auth:api']);
     Route::post('product/sample/list', [ApiController::class, 'getSampleProduct'])->middleware(['auth:api']);
+    Route::get('support/details', [ApiController::class, 'getSupportDetails'])->middleware(['auth:api']);
 });
