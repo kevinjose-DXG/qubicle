@@ -335,7 +335,7 @@ class ApiController extends BaseController
                     $order_details->category_id         = $row->category_id;
                     $order_details->sub_category_id     = $row->sub_category_id;
                     $order_details->brand_id            = $row->brand_id;
-                    $order_details->modal_id            = $row->modal_id;
+                    $order_details->modal_id            = $row->model_id;
                     $order_details->image_customize     = $row->customize_image;
                     $order_details->text_customize      = $row->customize_text;
                     $order_details->quantity            = $row->quantity;
