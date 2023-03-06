@@ -144,5 +144,11 @@ use App\Http\Controllers\PolicyController;
         Route::any('/policy/save', [PolicyController::class, 'savePolicy'])->name('savePolicy');
         Route::any('/policy/edit/{id}', [PolicyController::class, 'editPolicy'])->name('editPolicy');
         Route::any('/policy/change/status', [PolicyController::class, 'changePolicyStatus'])->name('changePolicyStatus');
+        //image download for order details
+        Route::get('/download-image/{path}', function ($path) {
+            $image_path = storage_path('/app/public/brand/' . $path);
+            return response()->download($image_path);
+        })->name('download-image');
+
     });
 require __DIR__.'/auth.php';

@@ -22,7 +22,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-            <!-- left column -->
+              <!-- left column -->
                 <div class="col-md-12">
                     <!-- general form elements -->
                     <div class="card">

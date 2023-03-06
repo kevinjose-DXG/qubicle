@@ -84,9 +84,9 @@ class OrderController extends Controller
         $order_id          = Crypt::decrypt($order_id);
         $order             = Order::with('orderDetail')->where('id',$order_id)->first();
         $data              = [
-            'order'            => $order,
+            'order'        => $order,
         ];
-        return view('admin.order.vieworderDetails',$data);
+        return view('admin.orders.view',$data);
     }
     /**
      *
