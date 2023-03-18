@@ -92,12 +92,12 @@ class OrderController extends Controller
      *
      */
     public function changeOrderStatus(Request $request){
-        $id                 = $request->order_id;
-        $order             = Order::where('id',$id)->first();
+        $id                     = $request->order_id;
+        $order                  = Order::where('id',$id)->first();
         if($request->status=='active'){
-            $order->status     = 'inactive';
+            $order->status      = 'inactive';
         }else{
-            $order->status     = 'active';
+            $order->status      = 'active';
         }
         $order->save();
         if($order){
