@@ -52,7 +52,12 @@ class OrderController extends Controller
             $order_status = [];
         foreach ($all_records_withFilter as $key=> $record) {
             $customer               = $record->customer->name;
-            $address = $record->customer->profileDetail->address1.',<br>'.$record->customer->profileDetail->address2.',<br>'.$record->customer->profileDetail->city.',<br>'.$record->customer->profileDetail->state.',<br>'.$record->customer->profileDetail->pincode.',<br> Landmark :'.$record->customer->profileDetail->landmark;
+            if($record->customer->profileDetail!=""){
+                $address = $record->customer->profileDetail->address1.',<br>'.$record->customer->profileDetail->address2.',<br>'.$record->customer->profileDetail->city.',<br>'.$record->customer->profileDetail->state.',<br>'.$record->customer->profileDetail->pincode.',<br> Landmark :'.$record->customer->profileDetail->landmark;
+            }else{
+                $address = '';
+            }
+            
             $order_id = $record->id;
             if($record->order_status=='onprocess'){
                 $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
