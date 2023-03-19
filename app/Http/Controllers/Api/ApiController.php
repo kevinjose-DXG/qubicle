@@ -325,8 +325,8 @@ class ApiController extends BaseController
                 }else{
                     $order_no                   = str_pad('1', 7, '0', STR_PAD_LEFT);
                 }
-                $sub_total          = 0;
-                $cart               = Cart::where('customer_id',$user->id)->get();
+                $sub_total                      = 0;
+                $cart                           = Cart::where('customer_id',$user->id)->get();
                 foreach($cart as $row){
                     $sub_total                          += $row->price;
                     $order_details                      = new OrderDetail();

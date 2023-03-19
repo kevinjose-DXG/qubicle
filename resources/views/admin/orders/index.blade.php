@@ -41,6 +41,7 @@
                             <th scope="col">Order No</th>
                             <th scope="col">Order Date</th>
                             <th scope="col">Customer</th>
+                            <th scope="col">Address</th>
                             <th scope="col">Order Status</th>
                             <th scope="col">Payment Status</th>
                             <th scope="col">Price</th>
@@ -49,6 +50,9 @@
                           <tr>
                             <th scope="col">
                               <input type="text" class="form-control" placeholder="order_no" name="order_no" id="col0_filter" value="">
+                            </th>
+                            <th scope="col">
+                                
                             </th>
                             <th scope="col">
                                 
@@ -128,6 +132,7 @@
               {data: 'order_no'},
               {data: 'order_date'},
               {data: 'customer'},
+              {data: 'address'},
               {data: 'order_status'},
               {data: 'payment_status'},
               {data: 'price'},
@@ -162,26 +167,29 @@
           }
       });
     });
-    $('#datatable-order-list').on('click', '.statusBtn', function (event) {
-      let vendor_id   = $(this).data("id");
-      let status      = $(this).data("prostatus");
-      let url         = "{{route('changeOrderstatus')}}";
-      $.ajax({
-          url: url,
-          type: 'get',
-          data: {vendor_id: vendor_id,status:status},
-          dataType: "json",
-          success: function (data) {
-              if (data.status == true) {
-                  toastr.success(data.message);
-                  setTimeout(function () {
-                      window.location.reload()
-                  }, 1000);
-              } else {
-                  toastr.error(data.message);
-              }
-          }
-      });
+    $('#datatable-order-list').on('change', '.statusBtn', function (event) {
+      let order_status    = $(this).val();
+      let order           = $(this)[0].id;
+      let order_id        = order.split("_").pop();
+      let url             = "{{route('changeOrderstatus')}}";
+      if (confirm('Are you sure you want to Update?')) {
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {order_id: order_id,order_status:order_status},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == true) {
+                    toastr.success(data.message);
+                    setTimeout(function () {
+                        window.location.reload()
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+      }
     });
     $.ajaxSetup({
       headers: {

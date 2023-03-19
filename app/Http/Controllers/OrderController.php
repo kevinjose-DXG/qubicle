@@ -49,11 +49,53 @@ class OrderController extends Controller
             ->offset($skip)
             ->take($rowperpage)
             ->get();
-        foreach ($all_records_withFilter as $record) {
+            $order_status = [];
+        foreach ($all_records_withFilter as $key=> $record) {
             $customer               = $record->customer->name;
-
+            $address = $record->customer->profileDetail->address1.',<br>'.$record->customer->profileDetail->address2.',<br>'.$record->customer->profileDetail->city.',<br>'.$record->customer->profileDetail->state.',<br>'.$record->customer->profileDetail->pincode.',<br> Landmark :'.$record->customer->profileDetail->landmark;
+            $order_id = $record->id;
+            if($record->order_status=='onprocess'){
+                $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
+                    <option value='onprocess'   @if($record->order_status=='onprocess') selected @endif>On Process</option>
+                    <option value='cancelled'   >Cancelled</option>
+                    <option value='shipped'     >Shipped</option>
+                    <option value='confirmed'   >Confirmed</option>
+                    <option value='delivered'   >Delivered</option>
+                </select>";
+            }else if($record->order_status=='cancelled'){
+                $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
+                    <option value='onprocess'   >On Process</option>
+                    <option value='cancelled'   @if($record->order_status=='cancelled') selected @endif>Cancelled</option>
+                    <option value='shipped'    >Shipped</option>
+                    <option value='confirmed'   >Confirmed</option>
+                    <option value='delivered'   >Delivered</option>
+                </select>";
+            }else if($record->order_status=='shipped'){
+                $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
+                    <option value='onprocess'   >On Process</option>
+                    <option value='cancelled'  >Cancelled</option>
+                    <option value='shipped'     @if($record->order_status=='shipped')   selected @endif>Shipped</option>
+                    <option value='confirmed'   >Confirmed</option>
+                    <option value='delivered'   >Delivered</option>
+                </select>";
+            }else if($record->order_status=='confirmed'){
+                $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
+                    <option value='onprocess'  >On Process</option>
+                    <option value='cancelled'  >Cancelled</option>
+                    <option value='shipped'     >Shipped</option>
+                    <option value='confirmed'   @if($record->order_status=='confirmed') selected @endif>Confirmed</option>
+                    <option value='delivered'   >Delivered</option>
+                </select>";
+            }else if($record->order_status=='delivered'){
+                $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>
+                    <option value='onprocess'  >On Process</option>
+                    <option value='cancelled'   >Cancelled</option>
+                    <option value='shipped'    >Shipped</option>
+                    <option value='confirmed'   >Confirmed</option>
+                    <option value='delivered'   @if($record->order_status=='delivered') selected @endif>Delivered</option>
+                </select>";
+            }
             $actions                = '<a href="'.route('viewOrder', ['id'=>Crypt::encrypt($record->id)]).'" data-id="{{ $record->id }}" data-field="variant" class="btn btn-primary">View</a>';
-           
             if($record->status=="active"){
                 $status             = '<a href="#" class="statusBtn btn btn-success" data-id="'.$record->id.'" data-prostatus="'.$record->status.'" >Active</a>';
             } else{
@@ -63,7 +105,8 @@ class OrderController extends Controller
                 "order_no"              => $record->order_no,
                 "order_date"            => $record->order_date,
                 "customer"              => $customer,
-                "order_status"          => $record->order_status,
+                "address"               => $address,
+                "order_status"          => $order_status,
                 "payment_status"        => $record->payment_status ,
                 "price"                 => $record->grand_total,
                 "actions"               => $actions,
@@ -93,12 +136,9 @@ class OrderController extends Controller
      */
     public function changeOrderStatus(Request $request){
         $id                     = $request->order_id;
+        $order_status           = $request->order_status;
         $order                  = Order::where('id',$id)->first();
-        if($request->status=='active'){
-            $order->status      = 'inactive';
-        }else{
-            $order->status      = 'active';
-        }
+        $order->order_status    = $order_status;
         $order->save();
         if($order){
             return response()->json(['status'=>true, 'message'=>'Success']);
