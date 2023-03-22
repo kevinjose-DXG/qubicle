@@ -111,6 +111,10 @@
                      <input type="text" class="form-control" id="price" name="price" placeholder="Price">
                   </div>
                   <div class="form-group">
+                     <label for="exampleInputEmail1">Delivery Charge</label>
+                     <input type="text" class="form-control" id="delivery_charge" name="delivery_charge" placeholder="Delivery Charge">
+                  </div>
+                  <div class="form-group">
                      <label for="exampleInputEmail1">Icon</label>
                      <input type="file" class="form-control" id="category_icon" name="category_icon" placeholder="Category Icon">
                   </div>
@@ -206,6 +210,7 @@
               $('.modal-title').html("Edit Category");
               $('#category').val(data.category.title);
               $('#description').val(data.category.description);
+              $('#delivery_charge').val(data.category.delivery_charge);
               if(data.category.phone=='1'){
                 $('#phone').prop("checked", true);
               }

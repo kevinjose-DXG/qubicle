@@ -317,18 +317,24 @@ class ApiController extends BaseController
             if(!$user){
                 return $this->sendError('No customer Found','',200);
             }
-                $maxValue                       = Order::max('order_no');
-                $order                          = new Order();
+                $maxValue                               = Order::max('order_no');
+                $order                                  = new Order();
                 if($maxValue){
-                    $maxValue                   = $maxValue+1;
-                    $order_no                   = str_pad($maxValue, 7, '0', STR_PAD_LEFT);
+                    $maxValue                           = $maxValue+1;
+                    $order_no                           = str_pad($maxValue, 7, '0', STR_PAD_LEFT);
                 }else{
-                    $order_no                   = str_pad('1', 7, '0', STR_PAD_LEFT);
+                    $order_no                           = str_pad('1', 7, '0', STR_PAD_LEFT);
                 }
-                $sub_total                      = 0;
-                $cart                           = Cart::where('customer_id',$user->id)->get();
+                $sub_total                              = 0;
+                $cart                                   = Cart::where('customer_id',$user->id)->get();
+                $arr_delivery_charge                    = array();
+                $sum_quantity                           = 0;
+                $dc_per_quantity                        = 10;
                 foreach($cart as $row){
+                    $category                           = Category::select('delivery_charge')->where('id',$row->category_id)->first();
+                    $arr_delivery_charge[]              = array_push($arr_delivery_charge, $category->delivery_charge);
                     $sub_total                          += $row->price;
+                    $sum_quantity                       += $row->quantity;
                     $order_details                      = new OrderDetail();
                     $order_details->order_id            = $order_no;
                     $order_details->customer_id         = $user->id;
@@ -343,15 +349,19 @@ class ApiController extends BaseController
                     $order_details->order_date	        = date('Y-m-d');
                     $order_details->save();
                 }
-                $order->address_id                = '1';
-                $order->customer_id               = $user->id;
-                $order->order_no                  = $order_no;
-                $order->order_date	              = date('Y-m-d');
-                $order->sub_total                 = $sub_total;
-                $order->discount_amount           = '0.00';
-                $order->tax                       = '0.00';
-                $order->delivery_charge           = '0.00';
-                $order->grand_total	              = $sub_total;
+                $delivery_charge                    = max($arr_delivery_charge);
+                $total_quantity_charge              = $sum_quantity * $dc_per_quantity;
+                $total_delivery_charge              = $delivery_charge + $total_quantity_charge;
+                $grand_total                        = $total_delivery_charge + $sub_total;
+                $order->address_id                  = '1';
+                $order->customer_id                 = $user->id;
+                $order->order_no                    = $order_no;
+                $order->order_date	                = date('Y-m-d');
+                $order->sub_total                   = $sub_total;
+                $order->discount_amount             = '0.00';
+                $order->tax                         = '0.00';
+                $order->delivery_charge             = $total_delivery_charge;
+                $order->grand_total	                = $grand_total;
                 $order->save();
                 if($order){
                     $clearCart = Cart::where('customer_id',$user->id)->delete();

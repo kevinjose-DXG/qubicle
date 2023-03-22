@@ -57,7 +57,6 @@ class OrderController extends Controller
             }else{
                 $address = '';
             }
-            
             $order_id = $record->id;
             if($record->order_status=='onprocess'){
                 $order_status = "<select name='current_order_status' id='current_order_status_$order_id' class='form-control statusBtn'>

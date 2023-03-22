@@ -51,6 +51,7 @@ class CategoryController extends Controller
                 $category->image                = $fileNameToStore;
             }
                 $category->title	            = $request->category;
+                $category->delivery_charge	    = $request->delivery_charge;
                 $category->description          = $request->description;
                 if(empty($request->phone)){
                     $phone	            = '0';

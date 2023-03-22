@@ -21,6 +21,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('phone')->default('0');
             $table->integer('customizable')->default('0');
             $table->float('price',8,2)->default('0.00');
+            $table->float('delivery_charge',8,2)->default('0.00');
             $table->enum('status',['active','inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();
