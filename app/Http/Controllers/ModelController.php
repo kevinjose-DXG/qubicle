@@ -28,7 +28,7 @@ class ModelController extends Controller
     public function saveModel(Request $request){
         try{
             $rules = [
-                'model'             => 'required|unique:models,title,'.$request->model_id,
+                'model'             => 'required|unique:brand_models,title,'.$request->model_id,
                 'brand_id'          => 'required'
             ];
             $messages = [
