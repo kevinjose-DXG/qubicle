@@ -287,9 +287,17 @@ class ApiController extends BaseController
             return $this->sendError('No customer Found','',200);
         }
         $cart       = Cart::where('customer_id',$user->id)->get();
+        $arr_delivery_charge                    = array();
+        $sum_quantity                           = 0;
+        $dc_per_quantity                        = 10;
+        $sub_total                              = 0;
         foreach($cart as $key=> $row){
             if($row->category!=""){
-                $cart[$key]['category_id']        = $row->category->title;
+                $category                           = Category::select('delivery_charge')->where('id',$row->category_id)->first();
+                $arr_delivery_charge[]              = array_push($arr_delivery_charge, $category->delivery_charge);
+                $sub_total                          += $row->price;
+                $sum_quantity                       += $row->quantity;
+                $cart[$key]['category_id']          = $row->category->title;
             }
             if($row->subcategory!=""){
                 $cart[$key]['sub_category_id']    = $row->subcategory->title;
@@ -301,6 +309,14 @@ class ApiController extends BaseController
                 $cart[$key]['model_id']           = $row->brandmodel->title;
             }
         }
+        $delivery_charge                    = max($arr_delivery_charge);
+        $total_quantity_charge              = $sum_quantity * $dc_per_quantity;
+        $total_delivery_charge              = $delivery_charge + $total_quantity_charge;
+        $grand_total                        = $total_delivery_charge + $sub_total;
+        $cart['delivery_charge']            = $delivery_charge;
+        $cart['total_quantity_charge']      = $total_quantity_charge;
+        $cart['total_delivery_charge']      = $total_delivery_charge;
+        $cart['grand_total']                = $grand_total;
         if($cart){
             return $this->sendResponse($cart, 'Success');
         }else{
