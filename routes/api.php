@@ -54,7 +54,7 @@ Route::prefix('customer')->group(function () {
     Route::get('cart/list', [ApiController::class, 'getCartList'])->middleware(['auth:api']);
     Route::post('cart/update', [ApiController::class, 'updateCart'])->middleware(['auth:api']);
     Route::post('cart/delete', [ApiController::class, 'deleteCartItem'])->middleware(['auth:api']);
-    Route::get('order/create', [ApiController::class, 'createOrder'])->middleware(['auth:api']);
+    Route::any('order/create', [ApiController::class, 'createOrder'])->middleware(['auth:api']);
     Route::post('response', [ApiController::class, 'response'])->middleware(['auth:api']);
     Route::get('order/list', [ApiController::class, 'orderList'])->middleware(['auth:api']);
     Route::post('order/details', [ApiController::class, 'orderDetails'])->middleware(['auth:api']);

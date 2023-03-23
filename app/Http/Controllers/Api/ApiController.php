@@ -389,8 +389,8 @@ class ApiController extends BaseController
                     $password               = "Test@123";
                     $product_id             = "NSE";
                     $date                   = date('Y-m-d H:i:s'); // current date
-                    $encRequestKey          = "KEY123657234";
-                    $decResponseKey         = "KEYRESP123657234";
+                    $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
+                    $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
                     $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
                     $user_email             = $user->email;
                     $user_contact_number    = $user->mobile;
@@ -494,7 +494,7 @@ class ApiController extends BaseController
              }';
          
               $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
-          
+              
               $curl = curl_init();
               curl_setopt_array($curl, array(
                    CURLOPT_URL => $data['payUrl'],
@@ -516,7 +516,7 @@ class ApiController extends BaseController
              $atomTokenId = null;
              $response = curl_exec($curl);
              $resp = json_decode($response, true);
-           dd($resp);
+             dd($resp);
              if($resp['txnMessage'] == 'FAILED'){
                  echo $resp['txnDescription'];
               }else{
