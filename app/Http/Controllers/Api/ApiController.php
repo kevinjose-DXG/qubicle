@@ -309,7 +309,7 @@ class ApiController extends BaseController
                 $cart[$key]['model_id']           = $row->brandmodel->title;
             }
         }
-        if($arr_delivery_charge!=""){
+        if(count($arr_delivery_charge)>0){
             $delivery_charge                    = max($arr_delivery_charge);
             $total_quantity_charge              = $sum_quantity * $dc_per_quantity;
             $total_delivery_charge              = $delivery_charge + $total_quantity_charge;
