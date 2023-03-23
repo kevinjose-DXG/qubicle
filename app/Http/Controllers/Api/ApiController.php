@@ -383,48 +383,48 @@ class ApiController extends BaseController
                 $order->grand_total	                = $grand_total;
                 $order->save();
                 if($order){
-                    $merchTxnId             = uniqId();
-                    $amount                 = $grand_total;
-                    $login                  = "317159";
-                    $password               = "Test@123";
-                    $product_id             = "NSE";
-                    $date                   = date('Y-m-d H:i:s'); // current date
-                    $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
-                    $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
-                    $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
-                    $user_email             = $user->email;
-                    $user_contact_number    = $user->mobile;
-                    $return_url             = "http://localhost/carspa/response";
-                    $payData                = array(
-                        'login'             =>    $login,
-                        'password'          =>    $password,
-                        'amount'            =>    $amount,
-                        'prod_id'           =>    $product_id,
-                        'txnId'             =>    $merchTxnId,
-                        'date'              =>    $date,
-                        'encKey'            =>    $encRequestKey,
-                        'decKey'            =>    $decResponseKey,
-                        'payUrl'            =>    $api_url,
-                        'email'             =>    $user_email,
-                        'mobile'            =>    $user_contact_number,
-                        'txnCurrency'       =>    'INR',
-                        'return_url'        =>    $return_url,
-                        'udf1'              =>    "",  // optional
-                        'udf2'              =>    "",  // optional 
-                        'udf3'              =>    "",  // optional
-                        'udf4'              =>    "",  // optional
-                        'udf5'              =>    ""   // optional
-                        );
-                    $atomTokenId                    = $this->createTokenId($payData);
-                    $transaction                    = new Transaction();
-                    $transaction->order_id          = $order_no;
-                    $transaction->txnId             = $merchTxnId;
-                    $transaction->trans_date        = date('Y-m-d');
-                    $transaction->price             = $amount;
-                    $transaction->payment_status    = 'notpaid';
-                    $transaction->save();
+                    // $merchTxnId             = uniqId();
+                    // $amount                 = '209.00';
+                    // $login                  = "317159";
+                    // $password               = "Test@123";
+                    // $product_id             = "NSE";
+                    // $date                   = date('Y-m-d H:i:s'); // current date
+                    // $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
+                    // $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
+                    // $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
+                    // $user_email             = $user->email;
+                    // $user_contact_number    = $user->mobile;
+                    // $return_url             = "http://localhost/carspa/response";
+                    // $payData                = array(
+                    //     'login'             =>    $login,
+                    //     'password'          =>    $password,
+                    //     'amount'            =>    $amount,
+                    //     'prod_id'           =>    $product_id,
+                    //     'txnId'             =>    $merchTxnId,
+                    //     'date'              =>    $date,
+                    //     'encKey'            =>    $encRequestKey,
+                    //     'decKey'            =>    $decResponseKey,
+                    //     'payUrl'            =>    $api_url,
+                    //     'email'             =>    $user_email,
+                    //     'mobile'            =>    $user_contact_number,
+                    //     'txnCurrency'       =>    'INR',
+                    //     'return_url'        =>    $return_url,
+                    //     'udf1'              =>    "",  // optional
+                    //     'udf2'              =>    "",  // optional 
+                    //     'udf3'              =>    "",  // optional
+                    //     'udf4'              =>    "",  // optional
+                    //     'udf5'              =>    ""   // optional
+                    //     );
+                    // $atomTokenId                    = $this->createTokenId($payData);
+                    // $transaction                    = new Transaction();
+                    // $transaction->order_id          = $order_no;
+                    // $transaction->txnId             = $merchTxnId;
+                    // $transaction->trans_date        = date('Y-m-d');
+                    // $transaction->price             = $amount;
+                    // $transaction->payment_status    = 'notpaid';
+                    // $transaction->save();
                     $clearCart = Cart::where('customer_id',$user->id)->delete();
-                    return response()->json(['atomTokenId'=>$atomTokenId,'message'=>'Success']);
+                    return response()->json(['status'=>true,'message'=>'Success']);
                 }else{
                     return response()->json(['status'=>false,'message'=>'Error']);
                 }
@@ -492,8 +492,7 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-         
-              $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
+             $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
               
               $curl = curl_init();
               curl_setopt_array($curl, array(
@@ -516,7 +515,7 @@ class ApiController extends BaseController
              $atomTokenId = null;
              $response = curl_exec($curl);
              $resp = json_decode($response, true);
-             dd($resp);
+             
              if($resp['txnMessage'] == 'FAILED'){
                  echo $resp['txnDescription'];
               }else{
