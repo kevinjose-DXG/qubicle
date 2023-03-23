@@ -291,6 +291,7 @@ class ApiController extends BaseController
         $sum_quantity                           = 0;
         $dc_per_quantity                        = 10;
         $sub_total                              = 0;
+        $cart                                   = [];
         foreach($cart as $key=> $row){
             if($row->category!=""){
                 $category                           = Category::select('delivery_charge')->where('id',$row->category_id)->first();
