@@ -17,6 +17,9 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('order_id')->nullable();
             $table->string('txnId')->nullable();
+            $table->date('trans_date')->nullable();
+            $table->float('price',8,2)->nullable();
+            $table->enum('payment_status',['paid','notpaid','cancelled','refunded'])->nullable();
             $table->timestamps();
         });
     }

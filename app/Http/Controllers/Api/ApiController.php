@@ -20,6 +20,7 @@ use App\Models\Profile;
 use App\Models\SampleProduct;
 use App\Models\Support;
 use App\Models\Policy;
+use App\Models\Transaction;
 use Exception;
 
 class ApiController extends BaseController
@@ -382,14 +383,77 @@ class ApiController extends BaseController
                 $order->grand_total	                = $grand_total;
                 $order->save();
                 if($order){
+                    $merchTxnId             = uniqId();
+                    $amount                 = $grand_total;
+                    $login                  = "317159";
+                    $password               = "Test@123";
+                    $product_id             = "NSE";
+                    $date                   = date('Y-m-d H:i:s'); // current date
+                    $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
+                    $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
+                    $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
+                    $user_email             = $user->email;
+                    $user_contact_number    = $user->mobile;
+                    $return_url             = "http://localhost/carspa/response";
+                    $payData                = array(
+                        'login'             =>    $login,
+                        'password'          =>    $password,
+                        'amount'            =>    $amount,
+                        'prod_id'           =>    $product_id,
+                        'txnId'             =>    $merchTxnId,
+                        'date'              =>    $date,
+                        'encKey'            =>    $encRequestKey,
+                        'decKey'            =>    $decResponseKey,
+                        'payUrl'            =>    $api_url,
+                        'email'             =>    $user_email,
+                        'mobile'            =>    $user_contact_number,
+                        'txnCurrency'       =>    'INR',
+                        'return_url'        =>    $return_url,
+                        'udf1'              =>    "",  // optional
+                        'udf2'              =>    "",  // optional 
+                        'udf3'              =>    "",  // optional
+                        'udf4'              =>    "",  // optional
+                        'udf5'              =>    ""   // optional
+                        );
+                    $atomTokenId                    = $this->createTokenId($payData);
+                    $transaction                    = new Transaction();
+                    $transaction->order_id          = $order_no;
+                    $transaction->txnId             = $merchTxnId;
+                    $transaction->trans_date        = date('Y-m-d');
+                    $transaction->price             = $amount;
+                    $transaction->payment_status    = 'notpaid';
+                    $transaction->save();
                     $clearCart = Cart::where('customer_id',$user->id)->delete();
-                    return response()->json(['status'=>true,'message'=>'Success']);
+                    return response()->json(['atomTokenId'=>$atomTokenId,'message'=>'Success']);
                 }else{
                     return response()->json(['status'=>false,'message'=>'Error']);
                 }
         } catch (Exception $e){
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
+    }
+    // main response function to get response data
+    public function response()
+    {
+             $data = $_POST['encData'];
+        
+             // change decryption key below for production
+             $decData = $this->decrypt($data, '75AEF0FA1B94B3C10D4F5B268F757F11', '75AEF0FA1B94B3C10D4F5B268F757F11');
+             $jsonData = json_decode($decData, true);
+                   
+              if($jsonData['payInstrument']['responseDetails']['statusCode'] == 'OTS0000'){
+                  echo 'Payment status = Transaction Successful';
+                  echo "<br>";
+                  echo 'Transaction id = '.$jsonData['payInstrument']['merchDetails']['merchTxnId'];
+                  echo "<br>";
+                  echo 'Transaction date = '.$jsonData['payInstrument']['merchDetails']['merchTxnDate']; 
+                  echo "<br>";
+                  echo 'Bank transaction id = '.$jsonData['payInstrument']['payModeSpecificData']['bankDetails']['bankTxnId'];
+               }else{
+                  echo 'Payment status = Transaction Failed';
+              }
+              echo "<pre>";
+              print_r($jsonData);  
     }
      /**
      * 
