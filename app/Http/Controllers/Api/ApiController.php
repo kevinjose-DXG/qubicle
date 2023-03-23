@@ -309,14 +309,17 @@ class ApiController extends BaseController
                 $cart[$key]['model_id']           = $row->brandmodel->title;
             }
         }
-        $delivery_charge                    = max($arr_delivery_charge);
-        $total_quantity_charge              = $sum_quantity * $dc_per_quantity;
-        $total_delivery_charge              = $delivery_charge + $total_quantity_charge;
-        $grand_total                        = $total_delivery_charge + $sub_total;
-        $cart['delivery_charge']            = $delivery_charge;
-        $cart['total_quantity_charge']      = $total_quantity_charge;
-        $cart['total_delivery_charge']      = $total_delivery_charge;
-        $cart['grand_total']                = $grand_total;
+        if($arr_delivery_charge!=""){
+            $delivery_charge                    = max($arr_delivery_charge);
+            $total_quantity_charge              = $sum_quantity * $dc_per_quantity;
+            $total_delivery_charge              = $delivery_charge + $total_quantity_charge;
+            $grand_total                        = $total_delivery_charge + $sub_total;
+            $cart['delivery_charge']            = $delivery_charge;
+            $cart['total_quantity_charge']      = $total_quantity_charge;
+            $cart['total_delivery_charge']      = $total_delivery_charge;
+            $cart['grand_total']                = $grand_total;
+        }
+        
         if($cart){
             return $this->sendResponse($cart, 'Success');
         }else{
