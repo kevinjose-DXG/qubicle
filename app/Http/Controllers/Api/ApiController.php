@@ -135,9 +135,9 @@ class ApiController extends BaseController
             }
             else{
                 if($request->category_id!=""){
-                    $category = Category::select('id','title','description','image','phone','customizable','price','status')->where('id',$request->category_id)->where('status','active')->first();
+                    $category = Category::select('id','title','description','image','phone','customizable','price','status','delivery_charge')->where('id',$request->category_id)->where('status','active')->first();
                 }else{
-                    $category = Category::select('id','title','description','image','phone','customizable','price','status')->where('status','active')->get();
+                    $category = Category::select('id','title','description','image','phone','customizable','price','status','delivery_charge')->where('status','active')->get();
                 }
                 if($category){
                     return $this->sendResponse($category, 'Success');
@@ -383,46 +383,46 @@ class ApiController extends BaseController
                 $order->grand_total	                = $grand_total;
                 $order->save();
                 if($order){
-                    $merchTxnId             = uniqId();
-                    $amount                 = $grand_total;
-                    $login                  = "317159";
-                    $password               = "Test@123";
-                    $product_id             = "NSE";
-                    $date                   = date('Y-m-d H:i:s'); // current date
-                    $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
-                    $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
-                    $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
-                    $user_email             = $user->email;
-                    $user_contact_number    = $user->mobile;
-                    $return_url             = "http://localhost/carspa/response";
-                    $payData                = array(
-                        'login'             =>    $login,
-                        'password'          =>    $password,
-                        'amount'            =>    $amount,
-                        'prod_id'           =>    $product_id,
-                        'txnId'             =>    $merchTxnId,
-                        'date'              =>    $date,
-                        'encKey'            =>    $encRequestKey,
-                        'decKey'            =>    $decResponseKey,
-                        'payUrl'            =>    $api_url,
-                        'email'             =>    $user_email,
-                        'mobile'            =>    $user_contact_number,
-                        'txnCurrency'       =>    'INR',
-                        'return_url'        =>    $return_url,
-                        'udf1'              =>    "",  // optional
-                        'udf2'              =>    "",  // optional 
-                        'udf3'              =>    "",  // optional
-                        'udf4'              =>    "",  // optional
-                        'udf5'              =>    ""   // optional
-                        );
-                    $atomTokenId                    = $this->createTokenId($payData);
-                    $transaction                    = new Transaction();
-                    $transaction->order_id          = $order_no;
-                    $transaction->txnId             = $merchTxnId;
-                    $transaction->trans_date        = date('Y-m-d');
-                    $transaction->price             = $amount;
-                    $transaction->payment_status    = 'notpaid';
-                    $transaction->save();
+                    // $merchTxnId             = uniqId();
+                    // $amount                 = $grand_total;
+                    // $login                  = "317159";
+                    // $password               = "Test@123";
+                    // $product_id             = "NSE";
+                    // $date                   = date('Y-m-d H:i:s'); // current date
+                    // $encRequestKey          = "A4476C2062FFA58980DC8F79EB6A799E";
+                    // $decResponseKey         = "75AEF0FA1B94B3C10D4F5B268F757F11";
+                    // $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
+                    // $user_email             = $user->email;
+                    // $user_contact_number    = $user->mobile;
+                    // $return_url             = "http://localhost/carspa/response";
+                    // $payData                = array(
+                    //     'login'             =>    $login,
+                    //     'password'          =>    $password,
+                    //     'amount'            =>    $amount,
+                    //     'prod_id'           =>    $product_id,
+                    //     'txnId'             =>    $merchTxnId,
+                    //     'date'              =>    $date,
+                    //     'encKey'            =>    $encRequestKey,
+                    //     'decKey'            =>    $decResponseKey,
+                    //     'payUrl'            =>    $api_url,
+                    //     'email'             =>    $user_email,
+                    //     'mobile'            =>    $user_contact_number,
+                    //     'txnCurrency'       =>    'INR',
+                    //     'return_url'        =>    $return_url,
+                    //     'udf1'              =>    "",  // optional
+                    //     'udf2'              =>    "",  // optional 
+                    //     'udf3'              =>    "",  // optional
+                    //     'udf4'              =>    "",  // optional
+                    //     'udf5'              =>    ""   // optional
+                    //     );
+                    // $atomTokenId                    = $this->createTokenId($payData);
+                    // $transaction                    = new Transaction();
+                    // $transaction->order_id          = $order_no;
+                    // $transaction->txnId             = $merchTxnId;
+                    // $transaction->trans_date        = date('Y-m-d');
+                    // $transaction->price             = $amount;
+                    // $transaction->payment_status    = 'notpaid';
+                    // $transaction->save();
                     $clearCart = Cart::where('customer_id',$user->id)->delete();
                     return response()->json(['status'=>true,'message'=>'Success']);
                 }else{
@@ -435,7 +435,7 @@ class ApiController extends BaseController
     // main response function to get response data
     public function response()
     {
-        dd("KK");
+        
              $data = $_POST['encData'];
         
              // change decryption key below for production
@@ -492,10 +492,8 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-             dd($jsondata);
-                $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
-              
-                $curl = curl_init();
+                $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
+                $curl       = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => $data['payUrl'],
                     CURLOPT_RETURNTRANSFER => true,
@@ -513,19 +511,18 @@ class ApiController extends BaseController
                         "Content-Type: application/x-www-form-urlencoded"
                     ),
                 ));
-             $atomTokenId = null;
-             $response = curl_exec($curl);
-             $resp = json_decode($response, true);
-             
-             if($resp['txnMessage'] == 'FAILED'){
-                 echo $resp['txnDescription'];
-              }else{
-                     $getresp = explode("&", $response); 
-                     $encresp = substr($getresp[1], strpos($getresp[1], "=") + 1);
-                     $decData = $this->decrypt($encresp, $data['decKey'], $data['decKey']);
+             $atomTokenId       = null;
+             $response          = curl_exec($curl);
+             $resp              = json_decode($response, true);
+                if($resp['txnMessage'] == 'FAILED'){
+                    echo $resp['txnDescription'];
+                }else{
+                     $getresp   = explode("&", $response); 
+                     $encresp   = substr($getresp[1], strpos($getresp[1], "=") + 1);
+                     $decData   = $this->decrypt($encresp, $data['decKey'], $data['decKey']);
                      if(curl_errno($curl)) {
-                         $error_msg = curl_error($curl);
-                         echo "error = ".$error_msg;
+                         $error_msg     = curl_error($curl);
+                         echo "error    = ".$error_msg;
                      }      
                      if(isset($error_msg)) {
                          echo "error = ".$error_msg;
@@ -547,29 +544,29 @@ class ApiController extends BaseController
      //do not change anything in below function 
      public function encrypt($data, $salt, $key)
      { 
-             $method = "AES-256-CBC";
-             $iv = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-             $chars = array_map("chr", $iv);
-             $IVbytes = join($chars);
-             $salt1 = mb_convert_encoding($salt, "UTF-8"); //Encoding to UTF-8
-             $key1 = mb_convert_encoding($key, "UTF-8"); //Encoding to UTF-8
-             $hash = openssl_pbkdf2($key1,$salt1,'256','65536', 'sha512'); 
-             $encrypted = openssl_encrypt($data, $method, $hash, OPENSSL_RAW_DATA, $IVbytes);
+             $method        = "AES-256-CBC";
+             $iv            = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+             $chars         = array_map("chr", $iv);
+             $IVbytes       = join($chars);
+             $salt1         = mb_convert_encoding($salt, "UTF-8"); //Encoding to UTF-8
+             $key1          = mb_convert_encoding($key, "UTF-8"); //Encoding to UTF-8
+             $hash          = openssl_pbkdf2($key1,$salt1,'256','65536', 'sha512'); 
+             $encrypted     = openssl_encrypt($data, $method, $hash, OPENSSL_RAW_DATA, $IVbytes);
              return strtoupper(bin2hex($encrypted));
      }  
      
      //do not change anything in below function
      public function decrypt($data, $salt, $key)
      {
-             $dataEncypted = hex2bin($data);
-             $method = "AES-256-CBC";
-             $iv = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-             $chars = array_map("chr", $iv);
-             $IVbytes = join($chars);
-             $salt1 = mb_convert_encoding($salt, "UTF-8");//Encoding to UTF-8
-             $key1 = mb_convert_encoding($key, "UTF-8");//Encoding to UTF-8
-             $hash = openssl_pbkdf2($key1,$salt1,'256','65536', 'sha512'); 
-             $decrypted = openssl_decrypt($dataEncypted, $method, $hash, OPENSSL_RAW_DATA, $IVbytes);
+             $dataEncypted      = hex2bin($data);
+             $method            = "AES-256-CBC";
+             $iv                = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+             $chars             = array_map("chr", $iv);
+             $IVbytes           = join($chars);
+             $salt1             = mb_convert_encoding($salt, "UTF-8");//Encoding to UTF-8
+             $key1              = mb_convert_encoding($key, "UTF-8");//Encoding to UTF-8
+             $hash              = openssl_pbkdf2($key1,$salt1,'256','65536', 'sha512'); 
+             $decrypted         = openssl_decrypt($dataEncypted, $method, $hash, OPENSSL_RAW_DATA, $IVbytes);
              return $decrypted;
      }
      /**
