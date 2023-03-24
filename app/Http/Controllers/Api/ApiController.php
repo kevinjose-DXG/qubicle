@@ -492,26 +492,27 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-             $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
+             dd($jsondata);
+                $encData = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
               
-              $curl = curl_init();
-              curl_setopt_array($curl, array(
-                   CURLOPT_URL => $data['payUrl'],
-                   CURLOPT_RETURNTRANSFER => true,
-                   CURLOPT_ENCODING => "",
-                   CURLOPT_MAXREDIRS => 10,
-                   CURLOPT_TIMEOUT => 0,
-                   CURLOPT_FOLLOWLOCATION => true,
-                   CURLOPT_SSL_VERIFYHOST => 2,
-                   CURLOPT_SSL_VERIFYPEER => 1,
-                   CURLOPT_CAINFO => dirname(__FILE__).'/cacert.pem', //added in Controllers folder
-                   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                   CURLOPT_CUSTOMREQUEST => "POST",
-                   CURLOPT_POSTFIELDS => "encData=".$encData."&merchId=".$data['login'],
-                   CURLOPT_HTTPHEADER => array(
-                     "Content-Type: application/x-www-form-urlencoded"
-                   ),
-             ));
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => $data['payUrl'],
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_SSL_VERIFYPEER => 1,
+                    CURLOPT_CAINFO => dirname(__FILE__).'/cacert.pem', //added in Controllers folder
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => "encData=".$encData."&merchId=".$data['login'],
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded"
+                    ),
+                ));
              $atomTokenId = null;
              $response = curl_exec($curl);
              $resp = json_decode($response, true);
