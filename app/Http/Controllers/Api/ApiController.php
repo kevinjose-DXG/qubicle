@@ -492,7 +492,7 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-              dd($jsondata);
+              //dd($jsondata);
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
