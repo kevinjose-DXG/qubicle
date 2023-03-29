@@ -460,7 +460,7 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-              dd($data['jsondata']);
+             
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
@@ -484,8 +484,6 @@ class ApiController extends BaseController
              $response          = curl_exec($curl);
              //dd($response);
              $resp              = json_decode($response, true);
-            
-            
                 if($resp['txnMessage'] == 'FAILED'){
                     echo $resp['txnDescription'];
                 }else{
