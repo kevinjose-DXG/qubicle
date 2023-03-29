@@ -482,8 +482,9 @@ class ApiController extends BaseController
                 ));
              $atomTokenId       = null;
              $response          = curl_exec($curl);
+             dd($response);
              $resp              = json_decode($response, true);
-             dd($resp);
+            
             
                 if($resp['txnMessage'] == 'FAILED'){
                     echo $resp['txnDescription'];
