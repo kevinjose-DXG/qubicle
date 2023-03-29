@@ -484,7 +484,7 @@ class ApiController extends BaseController
              $response          = curl_exec($curl);
              $resp              = json_decode($response, true);
              print_r($resp);
-             exit;
+            
                 if($resp['txnMessage'] == 'FAILED'){
                     echo $resp['txnDescription'];
                 }else{
