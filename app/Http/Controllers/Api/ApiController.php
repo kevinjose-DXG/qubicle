@@ -460,7 +460,7 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-             
+                
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
@@ -482,7 +482,7 @@ class ApiController extends BaseController
                 ));
              $atomTokenId       = null;
              $response          = curl_exec($curl);
-             //dd($response);
+             dd($response);
              $resp              = json_decode($response, true);
                 if($resp['txnMessage'] == 'FAILED'){
                     echo $resp['txnDescription'];
