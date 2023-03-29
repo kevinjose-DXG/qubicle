@@ -460,7 +460,7 @@ class ApiController extends BaseController
                      }
                  }  
              }';
-            //  dd($jsondata);
+              //dd($jsondata);
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
@@ -837,7 +837,7 @@ class ApiController extends BaseController
     }
     public function getTokenId(){ 
         try{
-            $merchTxnId             = uniqId();
+                    $merchTxnId             = uniqId();
                     $amount                 = '500.00';
                     $login                  = "317159";
                     $password               = "Test@123";
@@ -869,7 +869,7 @@ class ApiController extends BaseController
                         'udf4'              =>    "",  // optional
                         'udf5'              =>    ""   // optional
                         );
-                    $atomTokenId                    = $this->createTokenId($payData);
+                    $atomTokenId            = $this->createTokenId($payData);
                     return response()->json(['status'=>true,'data'=>$atomTokenId]);
         }catch(Exception $e){
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
