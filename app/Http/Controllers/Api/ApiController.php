@@ -760,7 +760,6 @@ class ApiController extends BaseController
              }';
                 
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
-                dd(dirname(__FILE__).'/cacert.pem');
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => $data['payUrl'],
@@ -783,7 +782,7 @@ class ApiController extends BaseController
              $response          = curl_exec($curl);
              
              $resp              = json_decode($response, true);
-             dd($resp);
+             
                 if($resp['txnMessage'] == 'FAILED'){
                     echo $resp['txnDescription'];
                 }else{
