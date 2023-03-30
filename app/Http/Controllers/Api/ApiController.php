@@ -761,7 +761,7 @@ class ApiController extends BaseController
                 
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
 
-                return $encData;exit;
+                
 
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
@@ -783,11 +783,11 @@ class ApiController extends BaseController
                 ));
              $atomTokenId       = null;
              $response          = curl_exec($curl);
-             $resp              = json_decode($response, true);
+            //  $resp              = json_decode($response, true);
              
-                if($resp['txnMessage'] == 'FAILED'){
-                    echo $resp['txnDescription'];
-                }else{
+                // if($resp['txnMessage'] == 'FAILED'){
+                //     echo $resp['txnDescription'];
+                // }else{
                      $getresp   = explode("&", $response); 
                      $encresp   = substr($getresp[1], strpos($getresp[1], "=") + 1);
                      $decData   = $this->decrypt($encresp, $data['decKey'], $data['decKey']);
@@ -808,7 +808,7 @@ class ApiController extends BaseController
                           $atomTokenId = null;
                        }
                      }
-             }
+            //  }
              return $atomTokenId;
      }
      
