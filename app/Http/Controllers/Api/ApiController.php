@@ -760,6 +760,9 @@ class ApiController extends BaseController
              }';
                 
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
+
+                return $encData;exit;
+
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => $data['payUrl'],
@@ -780,7 +783,6 @@ class ApiController extends BaseController
                 ));
              $atomTokenId       = null;
              $response          = curl_exec($curl);
-             
              $resp              = json_decode($response, true);
              
                 if($resp['txnMessage'] == 'FAILED'){
