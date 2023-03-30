@@ -760,9 +760,6 @@ class ApiController extends BaseController
              }';
                 
                 $encData    = $this->encrypt($jsondata, $data['encKey'], $data['encKey']);
-
-                
-
                 $curl       = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_URL => $data['payUrl'],
@@ -878,7 +875,8 @@ class ApiController extends BaseController
                         'udf5'              =>    ""   // optional
                         );
                     $atomTokenId            = $this->createTokenId($payData);
-                    return response()->json(['status'=>true,'data'=>$atomTokenId]);
+                    return view('atompay')->with('data', $payData)
+                                   ->with('atomTokenId', $atomTokenId);
         }catch(Exception $e){
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
