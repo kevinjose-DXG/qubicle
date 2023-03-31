@@ -701,26 +701,24 @@ class ApiController extends BaseController
     // main response function to get response data
     public function response()
     {
-        
-             $data = $_POST['encData'];
-        
-             // change decryption key below for production
-             $decData = $this->decrypt($data, '75AEF0FA1B94B3C10D4F5B268F757F11', '75AEF0FA1B94B3C10D4F5B268F757F11');
-             $jsonData = json_decode($decData, true);
-                   
-              if($jsonData['payInstrument']['responseDetails']['statusCode'] == 'OTS0000'){
-                  echo 'Payment status = Transaction Successful';
-                  echo "<br>";
-                  echo 'Transaction id = '.$jsonData['payInstrument']['merchDetails']['merchTxnId'];
-                  echo "<br>";
-                  echo 'Transaction date = '.$jsonData['payInstrument']['merchDetails']['merchTxnDate']; 
-                  echo "<br>";
-                  echo 'Bank transaction id = '.$jsonData['payInstrument']['payModeSpecificData']['bankDetails']['bankTxnId'];
-               }else{
-                  echo 'Payment status = Transaction Failed';
-              }
-              echo "<pre>";
-              print_r($jsonData);  
+        $data       = $_POST['encData'];
+        // change decryption key below for production
+        $decData    = $this->decrypt($data, '75AEF0FA1B94B3C10D4F5B268F757F11', '75AEF0FA1B94B3C10D4F5B268F757F11');
+        $jsonData   = json_decode($decData, true);
+        dd($jsonData['payInstrument']);
+            if($jsonData['payInstrument']['responseDetails']['statusCode'] == 'OTS0000'){
+                echo 'Payment status = Transaction Successful';
+                echo "<br>";
+                echo 'Transaction id = '.$jsonData['payInstrument']['merchDetails']['merchTxnId'];
+                echo "<br>";
+                echo 'Transaction date = '.$jsonData['payInstrument']['merchDetails']['merchTxnDate']; 
+                echo "<br>";
+                echo 'Bank transaction id = '.$jsonData['payInstrument']['payModeSpecificData']['bankDetails']['bankTxnId'];
+            }else{
+                echo 'Payment status = Transaction Failed';
+            }
+            echo "<pre>";
+            print_r($jsonData);  
     }
      //do not change anything in below function
      public function createTokenId($data)
