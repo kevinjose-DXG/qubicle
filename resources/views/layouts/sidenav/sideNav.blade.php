@@ -77,7 +77,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('showSampleProduct')}}" class="nav-link" id="sample_product_menu">
+            <a href="{{route('showCombo')}}" class="nav-link" id="combo_menu">
                 <i class="nav-icon fa fa-clone"></i>
               <p>Combo Offer</p>
             </a>

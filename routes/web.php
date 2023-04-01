@@ -19,6 +19,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SampleProductController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\ComboController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -145,10 +146,10 @@ use App\Http\Controllers\PolicyController;
         Route::any('/policy/edit/{id}', [PolicyController::class, 'editPolicy'])->name('editPolicy');
         Route::any('/policy/change/status', [PolicyController::class, 'changePolicyStatus'])->name('changePolicyStatus');
         //Policy
-        Route::any('/comobo', [PolicyController::class, 'showPolicy'])->name('showPolicy');
-        Route::any('/comobo/save', [PolicyController::class, 'savePolicy'])->name('savePolicy');
-        Route::any('/comobo/edit/{id}', [PolicyController::class, 'editPolicy'])->name('editPolicy');
-        Route::any('/comobo/change/status', [PolicyController::class, 'changePolicyStatus'])->name('changePolicyStatus');
+        Route::any('/combo', [ComboController::class, 'showCombo'])->name('showCombo');
+        Route::any('/combo/save', [ComboController::class, 'saveCombo'])->name('saveCombo');
+        Route::any('/combo/edit/{id}', [ComboController::class, 'editCombo'])->name('editCombo');
+        Route::any('/combo/change/status', [ComboController::class, 'changeComboStatus'])->name('changeComboStatus');
         //image download for order details
         Route::get('/download-image/{path}', function ($path) {
             $image_path = storage_path('app/public/customizeimage/' . $path);
