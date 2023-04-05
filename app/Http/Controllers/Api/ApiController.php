@@ -932,7 +932,7 @@ class ApiController extends BaseController
                // }else{
                     $getresp   = explode("&", $response); 
                     $encresp   = substr($getresp[1], strpos($getresp[1], "=") + 1);
-                    $decData   = $this->decrypt($encresp, $data['decKey'], $data['decKey']);
+                    $decData   = $this->decrypt($encresp, '75AEF0FA1B94B3C10D4F5B268F757F11','75AEF0FA1B94B3C10D4F5B268F757F11');
                     if(curl_errno($curl)) {
                         $error_msg     = curl_error($curl);
                         echo "error    = ".$error_msg;
