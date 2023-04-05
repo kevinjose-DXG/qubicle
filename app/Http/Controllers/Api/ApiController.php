@@ -943,7 +943,7 @@ class ApiController extends BaseController
                     curl_close($curl);
                     $res = json_decode($decData, true);
                     if($res){
-                        dd($res);
+                        dd($res['responseDetails']);
                       if($res['responseDetails']['txnStatusCode'] == 'OTS0000'){
                         $atomTokenId = $res['atomTokenId'];
                       }else{
