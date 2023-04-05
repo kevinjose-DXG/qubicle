@@ -33,6 +33,7 @@
                 "returnUrl": "{{$data['return_url']}}"
             }
             let atom = new AtomPaynetz(options, 'uat');
+            console.log(atom);
         }
     </script>
 </body>
