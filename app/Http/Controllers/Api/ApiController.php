@@ -879,4 +879,78 @@ class ApiController extends BaseController
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);
         }
     }
+    //do not change anything in below function
+    public function transactionRequest()
+    {
+           $jsondata = '{ 
+                "payInstrument" : { 
+                    "headDetails" : { 
+                        "api" : "TXNVERIFICATION", 
+                        "source" : "OTS" 
+                    }, 
+                    "merchDetails" : { 
+                        "merchId" : 317159, 
+                        "password" : "Test@123", 
+                        "merchTxnId" : "250420221", 
+                        "merchTxnDate" : "2023-04-25" 
+                    }, 
+                    "payDetails" : { 
+                        "amount" : 500.00, 
+                        "txnCurrency" : "INR", 
+                        "signature" : 
+                        "abaf4b4011b6813c0a16896302a6fab404035df377d3b25e60b8a6766dffb6383891a7443f603fc99b643e2bf4049d34eccc74e3253
+                        3c742c25580f60e17ab2a" 
+                    } 
+                } 
+            }';
+               
+               $encData    = $this->encrypt($jsondata, '75AEF0FA1B94B3C10D4F5B268F757F11', '75AEF0FA1B94B3C10D4F5B268F757F11');
+               $curl       = curl_init();
+               curl_setopt_array($curl, array(
+                   CURLOPT_URL => 'https://caller.atomtech.in/ots/payment/status',
+                   CURLOPT_RETURNTRANSFER => true,
+                   CURLOPT_ENCODING => "",
+                   CURLOPT_MAXREDIRS => 10,
+                   CURLOPT_TIMEOUT => 0,
+                   CURLOPT_FOLLOWLOCATION => true,
+                   CURLOPT_SSL_VERIFYHOST => 2,
+                   CURLOPT_SSL_VERIFYPEER => 1,
+                   CURLOPT_CAINFO => dirname(__FILE__).'/cacert.pem', //added in Controllers folder
+                   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                   CURLOPT_CUSTOMREQUEST => "POST",
+                   CURLOPT_POSTFIELDS => "encData=".$encData."&merchId=".'317159',
+                   CURLOPT_HTTPHEADER => array(
+                       "Content-Type: application/x-www-form-urlencoded"
+                   ),
+               ));
+            $atomTokenId       = null;
+            $response          = curl_exec($curl);
+             $resp              = json_decode($response, true);
+            dd($resp);
+               // if($resp['txnMessage'] == 'FAILED'){
+               //     echo $resp['txnDescription'];
+               // }else{
+                    $getresp   = explode("&", $response); 
+                    $encresp   = substr($getresp[1], strpos($getresp[1], "=") + 1);
+                    $decData   = $this->decrypt($encresp, $data['decKey'], $data['decKey']);
+                    if(curl_errno($curl)) {
+                        $error_msg     = curl_error($curl);
+                        echo "error    = ".$error_msg;
+                    }      
+                    if(isset($error_msg)) {
+                        echo "error = ".$error_msg;
+                    }   
+                    curl_close($curl);
+                    $res = json_decode($decData, true);
+                    if($res){
+                      if($res['responseDetails']['txnStatusCode'] == 'OTS0000'){
+                        $atomTokenId = $res['atomTokenId'];
+                      }else{
+                        echo "Error getting data";
+                         $atomTokenId = null;
+                      }
+                    }
+           //  }
+            return $atomTokenId;
+    }
 }
