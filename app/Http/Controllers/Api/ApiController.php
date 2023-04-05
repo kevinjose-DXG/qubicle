@@ -925,8 +925,8 @@ class ApiController extends BaseController
                ));
             $atomTokenId       = null;
             $response          = curl_exec($curl);
-             $resp              = json_decode($response, true);
-            dd($resp);
+           //  $resp              = json_decode($response, true);
+            
                // if($resp['txnMessage'] == 'FAILED'){
                //     echo $resp['txnDescription'];
                // }else{
@@ -943,6 +943,7 @@ class ApiController extends BaseController
                     curl_close($curl);
                     $res = json_decode($decData, true);
                     if($res){
+                        dd($res);
                       if($res['responseDetails']['txnStatusCode'] == 'OTS0000'){
                         $atomTokenId = $res['atomTokenId'];
                       }else{
