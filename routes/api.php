@@ -68,4 +68,5 @@ Route::prefix('customer')->group(function () {
     Route::get('support/details', [ApiController::class, 'getSupportDetails'])->middleware(['auth:api']);
     Route::get('policy/details', [ApiController::class, 'getPolicyDetails'])->middleware(['auth:api']);
     Route::get('token/detail', [ApiController::class, 'getTokenId']);
+    Route::get('transaction/status', [ApiController::class, 'transactionRequest']);
 });
