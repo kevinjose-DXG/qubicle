@@ -904,6 +904,7 @@ class ApiController extends BaseController
             }';
                
                $encData    = $this->encrypt($jsondata, 'A4476C2062FFA58980DC8F79EB6A799E', 'A4476C2062FFA58980DC8F79EB6A799E');
+               dd($encData);
                $curl       = curl_init();
                curl_setopt_array($curl, array(
                    CURLOPT_URL => 'https://caller.atomtech.in/ots/payment/status',
