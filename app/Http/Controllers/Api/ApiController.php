@@ -903,9 +903,8 @@ class ApiController extends BaseController
                 } 
             }';
                
-               $encData    = $this->encrypt($jsondata, 'A4476C2062FFA58980DC8F79EB6A799E', 'A4476C2062FFA58980DC8F79EB6A799E');
-               dd($encData);
-               $curl       = curl_init();
+               $encData    = $this->encrypt($jsondata, 'KEY1234567234', 'KEY1234567234');
+                $curl       = curl_init();
                curl_setopt_array($curl, array(
                    CURLOPT_URL => 'https://caller.atomtech.in/ots/payment/status',
                    CURLOPT_RETURNTRANSFER => true,
@@ -932,7 +931,7 @@ class ApiController extends BaseController
                // }else{
                     $getresp   = explode("&", $response); 
                     $encresp   = substr($getresp[1], strpos($getresp[1], "=") + 1);
-                    $decData   = $this->decrypt($encresp, '75AEF0FA1B94B3C10D4F5B268F757F11', '75AEF0FA1B94B3C10D4F5B268F757F11');
+                    $decData   = $this->decrypt($encresp, 'KERESPY1234567234', 'KERESPY1234567234');
                     if(curl_errno($curl)) {
                         $error_msg     = curl_error($curl);
                         echo "error    = ".$error_msg;
