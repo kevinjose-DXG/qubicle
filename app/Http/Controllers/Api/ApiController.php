@@ -889,17 +889,16 @@ class ApiController extends BaseController
                         "source" : "OTS" 
                     }, 
                     "merchDetails" : { 
-                        "merchId" : 317157, 
+                        "merchId" : 317159, 
                         "password" : "Test@123", 
-                        "merchTxnId" : "txnfeb2023", 
-                        "merchTxnDate" : "2023-04-02" 
+                        "merchTxnId" : "642e552bea31c", 
+                        "merchTxnDate" : "2023-04-06" 
                     }, 
                     "payDetails" : { 
-                        "amount" : 466.00, 
+                        "amount" : 500.0, 
                         "txnCurrency" : "INR", 
                         "signature" : 
-                        "abaf4b4011b6813c0a16896302a6fab404035df377d3b25e60b8a6766dffb6383891a7443f603fc99b643e2bf4049d34eccc74e3253
-                        3c742c25580f60e17ab2a" 
+                        "f52b2f10ef8ec0b86ebf63336b571fd92a69613b3f0f4f834e031561390944a3e867fbf0db8e5971ae8596f4bc6acba2fc52a32baf5490c5c77f056f51de1dde" 
                     } 
                 } 
             }';
