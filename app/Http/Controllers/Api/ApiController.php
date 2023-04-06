@@ -917,7 +917,7 @@ class ApiController extends BaseController
                    CURLOPT_CAINFO => dirname(__FILE__).'/cacert.pem', //added in Controllers folder
                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                    CURLOPT_CUSTOMREQUEST => "POST",
-                   CURLOPT_POSTFIELDS => "encData=".$encData."&merchId=".'317157',
+                   CURLOPT_POSTFIELDS => "encData=".$encData."&merchId=".'317159',
                    CURLOPT_HTTPHEADER => array(
                        "Content-Type: application/x-www-form-urlencoded"
                    ),
