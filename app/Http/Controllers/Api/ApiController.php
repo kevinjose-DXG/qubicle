@@ -851,7 +851,7 @@ class ApiController extends BaseController
                     $api_url                = "https://caller.atomtech.in/ots/aipay/auth";
                     $user_email             = "kevin.jose4u@gmail.com";
                     $user_contact_number    = "9745920795";
-                    $return_url             = "http://giftx.co.in/api/customer/response";
+                    $return_url             = "https://giftx.co.in/api/customer/response";
                     $payData                = array(
                         'login'             =>    $login,
                         'password'          =>    $password,
