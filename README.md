@@ -33,6 +33,6 @@ This test is done using PHP Version 8.1.10 and laravel framework 8.75
 - **4.Migrate The Tables**
 - **5.Run The command php artisan db:seed --class=UserSeeder**
 - **6.Projectname/ can access the user registration page**
-- **7.Projectname/admin can access the user registration page**
+- **7.Projectname/admin can access the Admin Panel**
 - **8.Admin creditentials will get after run step-5 from the UserSeeder**
 
