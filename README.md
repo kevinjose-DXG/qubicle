@@ -27,8 +27,8 @@ This test is done using PHP Version 8.1.10 and laravel framework 8.75
 
 ### Steps To Follow
 
-1 **Git Clone the task to your localsystem**
-- **[Tighten Co.](https://tighten.co)**
+1 **Git Clone the task to your local system**
+2 **[Tighten Co.](https://tighten.co)**
 - **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
 - **[64 Robots](https://64robots.com)**
 - **[Cubet Techno Labs](https://cubettech.com)**
