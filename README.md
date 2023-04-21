@@ -27,8 +27,12 @@ This test is done using PHP Version 8.1.10 and laravel framework 8.75
 
 ### Steps To Follow
 
-- **Git Clone the task to your local system**
-- **Make an env file, generate key and set database credentials**
-- **Composer Update**
-- **Migrate The Tables**
-- **Run The command ~ php artisan db:seed --class=UserSeeder ~**
+- **1.Git Clone the task to your local system**
+- **2.Make an env file, generate key and set database credentials**
+- **3.Composer Update**
+- **4.Migrate The Tables**
+- **5.Run The command ~ php artisan db:seed --class=UserSeeder ~**
+- **6.Projectname/ can access the user registration page**
+- **7.Projectname/admin can access the user registration page**
+- **8.Admin creditentials will get after run step-5 from the UserSeeder**
+
