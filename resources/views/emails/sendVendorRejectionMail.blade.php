@@ -39,10 +39,10 @@ $home_link = url('/');
                                                    <p>On your application review, we realised that your some of the information's are wrong or correction needed . That is the reason we've planned to review your application</p>
                                                    <p>Reason:</p>
                                                    <p>{{$reason}}</p>
-                                                   <p>Contact us for completing the onboarding to <b>GIFTX</b> . Contact on : MAIL ADDRESS , +91 8129 654 111</p>
+                                                   <p>Contact us for completing the onboarding to <b>qubicle</b> . Contact on : MAIL ADDRESS , +91 8129 654 111</p>
                                                    <p>Feel free to reach out to us for any additional queries</p>
                                                    <p>Thank You</p>
-                                                   <p>TEAM GIFTX</p>
+                                                   <p>TEAM qubicle</p>
                                                 </font>
                                             </td>
                                         </tr>
@@ -94,7 +94,7 @@ $home_link = url('/');
                                                     </tr>
                                                     <tr>
                                                         <td align="center">
-                                                            <font family="Futura" face="arial">GIFTX</font>
+                                                            <font family="Futura" face="arial">qubicle</font>
                                                         </td>
                                                     </tr>
                                                     <tr>

@@ -82,7 +82,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
       <img src="{{ asset('/')  }}images/logo.png" alt="AdminLTE Logo" class="brand-image img" style="opacity: .8">
-      <span class="brand-text font-weight-light">GIFTX</span>
+      <span class="brand-text font-weight-light">qubicle</span>
     </a>
 
     <!-- Sidebar -->
@@ -126,7 +126,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; {{ date('Y')}} <a href="{{ route('dashboard')}}">GIFTX</a>.</strong>
+    <strong>Copyright &copy; {{ date('Y')}} <a href="{{ route('dashboard')}}">qubicle</a>.</strong>
     All rights reserved.
     <!-- <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0

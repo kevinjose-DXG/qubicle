@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSlidersTable extends Migration
+class CreateUserNetworksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateSlidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('sliders', function (Blueprint $table) {
+        Schema::create('user_networks', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('slider_image')->nullable();
-            $table->text('description')->nullable();
-            $table->enum('status',['active','inactive'])->default('active');
+            $table->integer('user_id')->default('0');
+            $table->integer('parent_user_id')->default('0');
+            $table->string('referral_code')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateSlidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sliders');
+        Schema::dropIfExists('user_networks');
     }
 }

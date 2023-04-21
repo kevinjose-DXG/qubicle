@@ -11,7 +11,7 @@
 <body>
 
     <div class="container my-5">
-        <h3 class="">GiftX</h3>
+        <h3 class="">qubicle</h3>
         <p>Transaction Id: {{ $data['txnId'] }}</p>
         <p>Atom Token Id: {{ $atomTokenId }}</p>
         <p>Pay Rs. {{ $data['amount'] }}</p>

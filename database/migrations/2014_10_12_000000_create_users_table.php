@@ -17,12 +17,10 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
-            $table->string('mobile')->unique();
             $table->string('password')->nullable();
-            $table->integer('otp')->default('0');
+            $table->string('referral_code')->nullable();
             $table->enum('status',['active','inactive','blocked','suspended'])->default('active');
-            $table->enum('user_type',['0','1','2','3','4'])->default('4')->comment('0-customer,1-vendor,2-vendor&customer,3-admin,4-Not Assigned');
-            $table->enum('details',['0','1','2'])->default('0');
+            $table->enum('user_type',['1','2'])->default('1')->comment('1-user,2-admin');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

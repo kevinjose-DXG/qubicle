@@ -42,12 +42,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function vendorDetail()
+    public function network()
     {
-        return $this->hasOne(VendorDetail::class,'vendor_id','id');
+        return $this->hasMany(UserNetwork::class,'parent_user_id','id');
     }
-    public function profileDetail()
-    {
-        return $this->hasOne(Profile::class,'customer_id','id');
-    }
+    
 }
