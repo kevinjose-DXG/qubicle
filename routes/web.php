@@ -39,12 +39,6 @@ use App\Http\Controllers\ComboController;
         Route::any('/admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
         //user
         Route::any('/user/list', [AdminController::class, 'showUser'])->name('user.list');
-        //category
-        Route::any('/category', [CategoryController::class, 'showCategory'])->name('showCategory');
-        Route::any('/category/save', [CategoryController::class, 'saveCategory'])->name('saveCategory');
-        Route::any('/category/edit/{id}', [CategoryController::class, 'editCategory'])->name('editCategory');
-        Route::any('/category/change/status', [CategoryController::class, 'changeCategoryStatus'])->name('changeCategoryStatus');
-        
         });
     });
 require __DIR__.'/auth.php';
