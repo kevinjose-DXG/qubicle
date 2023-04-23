@@ -35,4 +35,4 @@ This test is done using PHP Version 8.1.10 and laravel framework 8.75
 - **6.Projectname/ can access the user registration page**
 - **7.Projectname/admin can access the Admin Panel**
 - **8.Admin creditentials will get after run step-5 from the UserSeeder**
-
+- **9.Run The Query in Level Table INSERT INTO levels (id, title, points, status, created_at, updated_at,deleted_at) VALUES (NULL, 'Level 10', '1', 'active', NULL, NULL, NULL), (NULL, 'Level 9', '2', 'active', NULL, NULL, NULL), (NULL, 'Level 8', '3', 'active', NULL, NULL, NULL), (NULL, 'Level 7', '4', 'active', NULL, NULL, NULL), (NULL, 'Level 6', '5', 'active', NULL, NULL, NULL), (NULL, 'Level 5', '6', 'active', NULL, NULL, NULL), (NULL, 'Level 4', '7', 'active', NULL, NULL, NULL), (NULL, 'Level 3', '8', 'active', NULL, NULL, NULL), (NULL, 'Level 2', '9', 'active', NULL, NULL, NULL), (NULL, 'Level 1', '10', 'active', NULL, NULL, NULL)`**

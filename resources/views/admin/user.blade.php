@@ -39,48 +39,18 @@
                                     <tr>
                                     <th>{{ __('page.no') }}</th>
                                     <th>User</th>
-                                    <th>Level</th>
                                     <th width="280px">Points</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($user as $row)
-                                    @php
-                                        $level = 0;
-                                        if($row->network_count==0)
-                                            $level = 'Level 11';
-                                        elseif ($row->network_count==1)
-                                            $level = 'Level 10';
-                                        elseif ($row->network_count==2)
-                                            $level = 'Level 9';
-                                        elseif ($row->network_count==3)
-                                            $level = 'Level 8';
-                                        elseif ($row->network_count==4)
-                                            $level = 'Level 7';
-                                        elseif ($row->network_count==5)
-                                            $level = 'Level 6';
-                                        elseif ($row->network_count==6)
-                                            $level = 'Level 5';
-                                        elseif ($row->network_count==7)
-                                            $level = 'Level 4';
-                                        elseif ($row->network_count==8)
-                                            $level = 'Level 3';  
-                                        elseif ($row->network_count==9)
-                                            $level = 'Level 2'; 
-                                        elseif ($row->network_count==10)
-                                            $level = 'Level 1';                       
-                                        elseif ($row->network_count>10)
-                                            $level = 'Level 1';     
-                                    @endphp
+                                  
+                                  @foreach($user_details as $key => $row)
                                   <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $row->name }}</td>
+                                    <td>{{ $row['user_name'] }}</td>
                                     <td>
-                                    
-                                     {{$level}}
-                                    </td>
-                                    <td>
-                                        {{$row->network_count}}
+                                   
+                                        {{ $row['total_points']}}
                                     </td>
                                   </tr>
                                   @endforeach
